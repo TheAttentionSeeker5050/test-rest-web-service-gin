@@ -8,6 +8,7 @@ func CalcRouter(routerObj *gin.Engine) *gin.Engine {
 
 	var addressPrefix string = "/api/v1/calculators"
 
+	// some test requests:
 	routerObj.GET(addressPrefix+"/calc", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "Hello calc!",
@@ -23,6 +24,8 @@ func CalcRouter(routerObj *gin.Engine) *gin.Engine {
 			"message": "Hello calc2!",
 		})
 	})
+
+	// the real requests:
 
 	return routerObj
 }
