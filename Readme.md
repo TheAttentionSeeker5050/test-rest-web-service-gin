@@ -1,8 +1,20 @@
 # My First Golang Gin Server
 
-# Description
+## Description
 
-This is just a basic project to get familiarized with golang, I just got started with go and want to get familiarized with the syntax, golang's methodology and the processes, methods and capabilities of Gin before I do more complex projects. The project consist on a Rest API in which you make a request and it calculates a specific mathematical function and returns values based on your input. I may try out other features of gin such as adding web drivers, authentication, permissions and advanced validation, but for now I will just make  API post requests without any auth and get the result on a json response
+This is just a basic project to get familiarized with golang, I just got started with go and want to get familiarized with the syntax, golang's methodology and the processes, methods and capabilities of Gin before I do more complex projects. The project consist on a Rest API in which you make a request and it calculates a specific mathematical function and returns values based on your input. I may try out other features of gin such as adding web drivers, authentication, permissions and advanced validation, but for now I will just make  API post requests without any auth and get the result on a json response. 
+
+**Disclaimer:** Please have in mind that  this is a work in progress and not everything below is ready yet
+
+## Tools to be Used 
+- A server technology, in this case, as I want to tinker with golang, it will be golang gin
+- A database, first option is postgresql, second option can be a mongo atlas instance on local computer or docker for development
+- Postman to end to end testing of API calls
+- Testing library for golang, I will have to research on this
+- If I find any tool that can make this work easier on testing, or input validation, I will use it
+- Input validation will be regex or basic data type / number validation when Necessary
+- For authentication may go for cookies validation for the moment, as it is not that complicated in most languages, IDK how it is on golang but will see
+
 
 ## API Structure
 
@@ -61,3 +73,6 @@ This is just a basic project to get familiarized with golang, I just got started
     - mod and checksum files (.mod and .sum)
 
 
+## Updates
+
+Updates and milestones go here
