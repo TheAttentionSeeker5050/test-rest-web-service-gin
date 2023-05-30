@@ -7,38 +7,21 @@ This is just a basic project to get familiarized with golang, I just got started
 ## API Structure
 
 ### Address Structure
-<ul>
-    <li>
-        /api/v1
-    </li>
-    <ul>
-        <li>
-            /calculator 
-        </li>
-        <ul>
-            <li>
-                {/all-calculators} (pending content)
-            </li>
-        </ul>
-        <li>
-            /history (pending content)
-        </li>
-        <li>
-            /user
-            <ul>
-                <li>
-                    /history (pending content)
-                </li>
-                <li>
-                    /login (pending content)
-                </li>
-                <li>
-                    /register (pending content)
-                </li>
-            </ul>
-        </li>
-    </ul>
-</ul>
+
+- api/v1
+    - /calculator/ (no api calls allowed on this exact address, but on children)
+        - all the calculators names are children of this, post request only
+            - basic-calculator
+            - bin-to-hex-converter
+            - hex-to-bin-converter
+            - sample-statistics-calculator
+        - /history, get request, to get all calculator operations saved by him and other users
+        - /history/<some filter> may be possible in the future
+    - /user (no api calls allowed on this exact address, but on children)
+        - /profile, get request, user has to be authenticated, may do delete and put request for editing profile data in the future, but for now only get
+        - /login, post only, if authentication successful user can acces data on its profile
+        - /register, post only, user has to /login to authenticate
+
 
 ### Request Body Structure for Calculator calls
 
@@ -46,5 +29,29 @@ This is just a basic project to get familiarized with golang, I just got started
 ### Request Body Structure for login calls
 
 ### Request Body Structure for register calls
+
+
+# Folder structure of the project
+
+- root (package main)
+    - routes 
+    - common
+        - calculator: calculator function directory
+        - validator: validator functions directory
+        - authentication:authentication methods directory
+        - other: stuff such as authentication middleware (may change)
+    - config
+        - db, environment variables, authentication, testing, url validation, etc configuration files
+    - model
+        - queries, views, other model files
+    - controller
+        - the middle point between the api routes and the model back and forth, uses common functions
+        - Invalid call api views
+    - tests
+        - all tests files go here (probably split it in subdirectories by purpose)
+
+    - main file
+    - readme file
+    - mod and checksum files (.mod and .sum)
 
 
