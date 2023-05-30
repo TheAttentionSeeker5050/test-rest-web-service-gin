@@ -24,11 +24,17 @@ This is just a basic project to get familiarized with golang, I just got started
 
 
 ### Request Body Structure for Calculator calls
+- /api/v1/calculator/basic-calc → **post** request; **request-body**: {params: (num1, num2, operand)}; **response**: {responseStatus, requestParams, date, result: (value), user(username or anon user)}
+- /api/v1/calculator/hex-to-bin → **post** request; **request-body**: {params: (hexString)}; **response**: {responseStatus, requestParams, date, result: (binString), user}
+- /api/v1/calculator/bin-to-hex → **post** request; **request-body**: {params: (binString)}; **response**: {responseStatus, requestParams, date, result: hexString, user}
+- /api/v1/calculator/statistics-calc → **post** request; **request-body**: {params: (… nums)}; **response**: {responseStatus, requestParams, date, result: (mean, median, standardDeviation), user}
+- /api/v1/calculator/history → **get** request; **response**: {responseStatus, calcType, requestParams, date, result, username}
 
 
-### Request Body Structure for login calls
-
-### Request Body Structure for register calls
+### Request Body Structure for user calls
+- /api/v1/user/profile → **get** request; **response**: {responseStatus, username, firstName, lastName, userSince, emailAddress, birthDay}; **needs authentication**
+- /api/v1/user/login → **post** request; **request-body**: {usernameOrEmailAddress, password}; **response**: {responseStatus, responseMessage}; **needs authentication**
+- /api/v1/user/register → **post** request; **request-body**: {username, firstName (optional), lastName (optional), emailAddress, password, passwordConfirmation, birthDay (optional)}; **response**: {responseStatus, , responseMessage}; **needs authentication**
 
 
 # Folder structure of the project
