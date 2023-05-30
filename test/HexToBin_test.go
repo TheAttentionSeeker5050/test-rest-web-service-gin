@@ -8,7 +8,8 @@ import (
 func TestHexToBin(t *testing.T) {
 
 	var has string = calculator.HexToBin("147F")
-	var expected string = "1010001111111"
+	// var expected string = "0001010001111111"
+	var expected string = "0001010001111111"
 
 	if has != expected {
 		t.Errorf("Expected %v but got %v", expected, has)
@@ -19,7 +20,7 @@ func TestHexToBin(t *testing.T) {
 
 func TestHexToBinInvalidHexString(t *testing.T) {
 
-	var has string = calculator.BinToHex("147FHIJK")
+	var has string = calculator.HexToBin("147FHIJK")
 	var expected string = "error"
 
 	if has != expected {
@@ -31,8 +32,8 @@ func TestHexToBinInvalidHexString(t *testing.T) {
 
 func TestHexToBinCharParam(t *testing.T) {
 
-	var has string = calculator.BinToHex("F")
-	var expected string = "15"
+	var has string = calculator.HexToBin("F")
+	var expected string = "1111"
 
 	if has != expected {
 		t.Errorf("Expected %v but got %v", expected, has)
