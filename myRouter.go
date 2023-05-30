@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func myRouter() *gin.Engine {
-	routerObj := gin.Default()
+func SampleRouter(routerObj *gin.Engine) *gin.Engine {
+	// routerObj := gin.Default()
 	routerObj.GET("/hello", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "Hello World!",
@@ -24,7 +24,7 @@ func myRouter() *gin.Engine {
 		})
 	})
 
-	routerObj.Run(":5000")
+	// routerObj.Run(":5000")
 
 	return routerObj
 }

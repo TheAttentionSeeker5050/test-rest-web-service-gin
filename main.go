@@ -1,9 +1,15 @@
 package main
 
-// "runtime"
-// "github.com/gin-gonic/gin"
+import (
+	"workspace/routers"
+
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
-	myRouter()
+	router := gin.Default()
+	// router = SampleRouter(router)
+	router = routers.CalcRouter(router)
+	router.Run(":5000")
 
 }
