@@ -8,7 +8,7 @@ import (
 func TestStatisticsCalculator(t *testing.T) {
 
 	mean, median, standardDeviation := calculator.StatisticsCalculator(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-	expectedMean, expectedMedian, expectedStandardDeviation := 5, 5, 2.872281
+	expectedMean, expectedMedian, expectedStandardDeviation := 5.5, 5.5, 2.872281
 
 	// if average != expectedAverage {
 	// 	t.Errorf("Expected average %v but got %v", expectedAverage, average)
@@ -38,7 +38,7 @@ func TestStatisticsCalculator(t *testing.T) {
 func TestStatisticsCalculatorOneParam(t *testing.T) {
 
 	mean, median, standardDeviation := calculator.StatisticsCalculator(1)
-	expectedMean, expectedMedian, expectedStandardDeviation := 1, 1, 0.0
+	expectedMean, expectedMedian, expectedStandardDeviation := 1.0, 1.0, 0.0
 
 	// if average != expectedAverage {
 	// 	t.Errorf("Expected average %v but got %v", expectedAverage, average)
@@ -69,7 +69,7 @@ func TestStatisticsCalculatorAllParamsAreZero(t *testing.T) {
 
 	mean, median, standardDeviation := calculator.StatisticsCalculator(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-	expectedMean, expectedMedian, expectedStandardDeviation := 0, 0, 0.0
+	expectedMean, expectedMedian, expectedStandardDeviation := 0.0, 0.0, 0.0
 
 	// if average != expectedAverage {
 	// 	t.Errorf("Expected average %v but got %v", expectedAverage, average)
@@ -100,7 +100,7 @@ func TestStatisticsCalculatorAllParamsAreZero(t *testing.T) {
 func TestStatisticsCalculatorNoParams(t *testing.T) {
 
 	mean, median, standardDeviation := calculator.StatisticsCalculator()
-	expectedMean, expectedMedian, expectedStandardDeviation := 0, 0, 0.0
+	expectedMean, expectedMedian, expectedStandardDeviation := 0.0, 0.0, 0.0
 
 	// if average != expectedAverage {
 	// 	t.Errorf("Expected average %v but got %v", expectedAverage, average)
