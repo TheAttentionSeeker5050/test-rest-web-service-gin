@@ -3,8 +3,9 @@
 ## Description
 
 This is just a basic project to get familiarized with golang, I just got started with go and want to get familiarized with the syntax, golang's methodology and the processes, methods and capabilities of Gin before I do more complex projects. The project consist on a Rest API in which you make a request and it calculates a specific mathematical function and returns values based on your input. I may try out other features of gin such as adding web drivers, authentication, permissions and advanced validation, but for now I will just make  API post requests without any auth and get the result on a json response. 
-
 **Disclaimer:** Please have in mind that  this is a work in progress and not everything below is ready yet
+
+<hr>
 
 ## Tools to be Used 
 - A server technology, in this case, as I want to tinker with golang, it will be golang gin
@@ -14,6 +15,8 @@ This is just a basic project to get familiarized with golang, I just got started
 - If I find any tool that can make this work easier on testing, or input validation, I will use it
 - Input validation will be regex or basic data type / number validation when Necessary
 - For authentication may go for cookies validation for the moment, as it is not that complicated in most languages, IDK how it is on golang but will see
+
+<hr>
 
 
 ## API Structure
@@ -48,8 +51,9 @@ This is just a basic project to get familiarized with golang, I just got started
 - /api/v1/user/login → **post** request; **request-body**: {usernameOrEmailAddress, password}; **response**: {responseStatus, responseMessage}; **needs authentication**
 - /api/v1/user/register → **post** request; **request-body**: {username, firstName (optional), lastName (optional), emailAddress, password, passwordConfirmation, birthDay (optional)}; **response**: {responseStatus, , responseMessage}; **needs authentication**
 
+<hr>
 
-# Folder structure of the project
+## Folder structure of the project
 
 - root (package main)
     - routes 
@@ -72,6 +76,7 @@ This is just a basic project to get familiarized with golang, I just got started
     - readme file
     - mod and checksum files (.mod and .sum)
 
+<hr>
 
 ## Updates
 
