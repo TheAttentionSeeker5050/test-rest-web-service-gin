@@ -36,6 +36,11 @@ func BinToHex(bin string) string {
 			return "error"
 		}
 
+		// validate if the last nibble in the loop is zero to break it
+		if i <= 0 && currentNibbleInt == 0 {
+			break
+		}
+
 		// format decimal to hex
 		var currentNibbleIntHex string = strconv.FormatInt(currentNibbleInt, 16)
 
