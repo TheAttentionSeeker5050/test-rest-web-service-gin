@@ -14,8 +14,14 @@ func myRouter() *gin.Engine {
 		})
 	})
 
+	// routerObj.GET("/os", func(c *gin.Context) {
+	// 	c.JSON(200, runtime.GOOS)
+	// })
+
 	routerObj.GET("/os", func(c *gin.Context) {
-		c.String(200, runtime.GOOS)
+		c.JSON(200, gin.H{
+			"OS": runtime.GOOS,
+		})
 	})
 
 	routerObj.Run(":5000")
