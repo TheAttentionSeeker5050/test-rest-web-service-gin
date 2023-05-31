@@ -1,6 +1,7 @@
 package main
 
 import (
+	"workspace/controller"
 	"workspace/routers"
 
 	"github.com/gin-gonic/gin"
@@ -8,7 +9,8 @@ import (
 
 func main() {
 	router := gin.Default()
-	// router = SampleRouter(router)
+	router.NoRoute(controller.NoRouteOrMethodController)
+
 	router = routers.CalcRouter(router)
 	router.Run(":5000")
 

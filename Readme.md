@@ -81,3 +81,11 @@ This is just a basic project to get familiarized with golang, I just got started
 ## Updates
 
 Updates and milestones go here
+
+### #1 Why you only see the main branch on public server?
+
+The reason for that is because I am not publishing the main, as I am discovering the goods and features of golang, I don't want to embarrass in public, I want to experiment in private, clean the messes that I make in the process and publish when I have a good version.
+
+![Screenshots of git tree on this project](screenshot-git-branches.png)
+
+Above you can see how I am doing my branching well enough, you are able to observe that I am making changes on different branches and then pulling and merging the changes to main branch. I could be more sophisticated pushes on specific directories or files, pull request, etc. but as this is a guy programmer project so I don't see the need for that.

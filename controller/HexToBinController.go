@@ -16,6 +16,7 @@ type HexToBinRequest struct {
 type HexToBinResponse struct {
 	BinResult  string          `json:"result"`
 	CalcParams HexToBinRequest `json:"converterInputs"`
+	Error      string          `json:"error"`
 }
 
 // the api handler controller function
@@ -24,7 +25,10 @@ func HexToBinController(c *gin.Context) {
 
 	// then bind the request body to the struct and check for errors
 	if err := c.ShouldBindJSON(&requestBody); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		// then create the response data struct
+		responseData := HexToBinResponse{BinResult: "", CalcParams: requestBody, Error: err.Error()}
+
+		c.JSON(http.StatusBadRequest, responseData)
 		return
 	}
 
