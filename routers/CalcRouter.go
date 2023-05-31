@@ -29,7 +29,8 @@ func CalcRouter(routerObj *gin.Engine) *gin.Engine {
 
 	// the real requests:
 
-	routerObj.GET(addressPrefix+"/basic-calc", controller.BasicCalcController)
+	routerObj.POST(addressPrefix+"/basic-calc", controller.BasicCalcController)
+	routerObj.POST(addressPrefix+"/bin-to-hex", controller.BinToHexController)
 
 	return routerObj
 }
