@@ -8,16 +8,20 @@ import (
 
 func CalcRouter(routerObj *gin.Engine) *gin.Engine {
 
+	// add the address prefix
 	var addressPrefix string = "/api/v1/calculators"
 
+	// add the router group using the address prefix
+	calculators := routerObj.Group(addressPrefix)
+
 	// some test requests:
-	routerObj.GET(addressPrefix+"/calc", func(c *gin.Context) {
+	calculators.GET("/calc", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "Hello calc!",
 		})
 	})
 
-	routerObj.GET(addressPrefix+"/calc2", func(c *gin.Context) {
+	calculators.GET("/calc2", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "Hello calc2!",
 		})
@@ -25,11 +29,11 @@ func CalcRouter(routerObj *gin.Engine) *gin.Engine {
 
 	// the real requests:
 
-	routerObj.POST(addressPrefix+"/basic-calc", controller.BasicCalcController)
-	routerObj.POST(addressPrefix+"/bin-to-hex", controller.BinToHexController)
-	routerObj.POST(addressPrefix+"/hex-to-bin", controller.HexToBinController)
-	routerObj.POST(addressPrefix+"/statistics-calc", controller.StatisticsCalculatorController)
-	routerObj.GET(addressPrefix+"/history", func(c *gin.Context) {
+	calculators.POST("/basic-calc", controller.BasicCalcController)
+	calculators.POST("/bin-to-hex", controller.BinToHexController)
+	calculators.POST("/hex-to-bin", controller.HexToBinController)
+	calculators.POST("/statistics-calc", controller.StatisticsCalculatorController)
+	calculators.GET("/history", func(c *gin.Context) {
 		c.String(200, "**API Calculator History** \nThis should make use of the server database")
 	})
 
