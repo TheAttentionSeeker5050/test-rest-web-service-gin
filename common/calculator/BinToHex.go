@@ -1,16 +1,22 @@
 package calculator
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 )
 
-func BinToHex(bin string) string {
+func BinToHex(bin string) (string, error) {
 	// convert bin to hex
 
 	// we are going to split the bin into 4 bits
 	var currentNibble string
 	var result string
+
+	// detect if the bin input string is empty
+	if len(bin) == 0 {
+		return "", errors.New("Invalid binary string, no empty strings allowed")
+	}
 
 	// first split bin into 4 bits
 	for i := len(bin); i >= 0; i -= 4 {
@@ -33,7 +39,7 @@ func BinToHex(bin string) string {
 
 		// display parse errors if any
 		if err != nil {
-			return "error"
+			return "", errors.New("Invalid binary string")
 		}
 
 		// validate if the last nibble in the loop is zero to break it
@@ -52,7 +58,7 @@ func BinToHex(bin string) string {
 	result = strings.ToUpper(result)
 
 	// return result
-	return result
+	return result, nil
 }
 
 func BinToDec(currentNibble string) {

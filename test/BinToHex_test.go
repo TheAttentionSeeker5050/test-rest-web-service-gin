@@ -7,10 +7,12 @@ import (
 
 func TestBinToHex(t *testing.T) {
 
-	var has string = calculator.BinToHex("1010001111111")
+	has, err := calculator.BinToHex("1010001111111")
 	var expected string = "147F"
 
-	if has != expected {
+	if err != nil {
+		t.Errorf("There was an error with the calculation %v ", err)
+	} else if has != expected {
 		t.Errorf("Expected %v but got %v", expected, has)
 	} else {
 		t.Log("Success", has)
@@ -19,10 +21,12 @@ func TestBinToHex(t *testing.T) {
 
 func TestBinToHexInvalidBinString(t *testing.T) {
 
-	var has string = calculator.BinToHex("1010001111111a")
-	var expected string = "error"
+	has, err := calculator.BinToHex("1010001111111a")
+	var expected string = ""
 
-	if has != expected {
+	if err != nil {
+		t.Log("There was an error with the calculation:", err)
+	} else if has != expected {
 		t.Errorf("Expected %v but got %v", expected, has)
 	} else {
 		t.Log("Success", has)
@@ -31,10 +35,12 @@ func TestBinToHexInvalidBinString(t *testing.T) {
 
 func TestBinToHexOneNibbleParam(t *testing.T) {
 
-	var has string = calculator.BinToHex("1010")
+	has, err := calculator.BinToHex("1010")
 	var expected string = "A"
 
-	if has != expected {
+	if err != nil {
+		t.Errorf("There was an error with the calculation: %v ", err)
+	} else if has != expected {
 		t.Errorf("Expected %v but got %v", expected, has)
 	} else {
 		t.Log("Success", has)
@@ -43,10 +49,12 @@ func TestBinToHexOneNibbleParam(t *testing.T) {
 
 func TestBinToHexOneNibbleParam2(t *testing.T) {
 
-	var has string = calculator.BinToHex("1011")
+	has, err := calculator.BinToHex("1011")
 	var expected string = "B"
 
-	if has != expected {
+	if err != nil {
+		t.Errorf("There was an error with the calculation: %v ", err)
+	} else if has != expected {
 		t.Errorf("Expected %v but got %v", expected, has)
 	} else {
 		t.Log("Success", has)

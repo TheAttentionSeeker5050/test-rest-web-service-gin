@@ -1,4 +1,3 @@
-// controller for the bin to hex post request api endpoint
 package controller
 
 import (
@@ -8,21 +7,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// first add the request params structure
-type BinToHexRequest struct {
-	Bin string `json:"bin"`
+// add the request params structure
+type HexToBinRequest struct {
+	Hex string `json:"hex"`
 }
 
-// then add the response params structure
-type BinToHexResponse struct {
-	HexResult  string          `json:"result"`
-	CalcParams BinToHexRequest `json:"converterInputs"`
+// add the response params structure
+type HexToBinResponse struct {
+	BinResult  string          `json:"result"`
+	CalcParams HexToBinRequest `json:"converterInputs"`
 }
 
 // the api handler controller function
-func BinToHexController(c *gin.Context) {
-	// first get the request body struct
-	var requestBody BinToHexRequest
+func HexToBinController(c *gin.Context) {
+	var requestBody HexToBinRequest
 
 	// then bind the request body to the struct and check for errors
 	if err := c.ShouldBindJSON(&requestBody); err != nil {
@@ -31,7 +29,7 @@ func BinToHexController(c *gin.Context) {
 	}
 
 	// then call the bin to hex function from the calculator package and get the result
-	result, err2 := calculator.BinToHex(requestBody.Bin)
+	result, err2 := calculator.HexToBin(requestBody.Hex)
 
 	// if there were errors with the calculator common function, return the error response
 	if err2 != nil {
@@ -40,7 +38,7 @@ func BinToHexController(c *gin.Context) {
 	}
 
 	// then create the response data struct
-	responseData := BinToHexResponse{HexResult: result, CalcParams: requestBody}
+	responseData := HexToBinResponse{BinResult: result, CalcParams: requestBody}
 
 	// return the response data using json format api response
 	c.JSON(http.StatusOK, responseData)

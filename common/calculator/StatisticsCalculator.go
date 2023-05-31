@@ -1,12 +1,13 @@
 package calculator
 
 import (
+	"errors"
 	"math"
 
 	"github.com/montanaflynn/stats"
 )
 
-func StatisticsCalculator(numbers ...int) (float64, float64, float64) {
+func StatisticsCalculator(numbers ...int) (float64, float64, float64, error) {
 	// returns average, mean, median, standard deviation of multiple integer numbers as parameters, as many as you like
 
 	// add the params to a slice
@@ -14,7 +15,7 @@ func StatisticsCalculator(numbers ...int) (float64, float64, float64) {
 
 	// if no params, return 0 for all
 	if len(numbers) == 0 {
-		return 0, 0, 0
+		return 0, 0, 0, errors.New("No parameters were passed")
 	}
 
 	for _, number := range numbers {
@@ -44,6 +45,6 @@ func StatisticsCalculator(numbers ...int) (float64, float64, float64) {
 	// var mean int = int(meanFloat)
 	// var median int = int(medianFloat)
 
-	return mean, median, standardDeviation
+	return mean, median, standardDeviation, nil
 
 }
