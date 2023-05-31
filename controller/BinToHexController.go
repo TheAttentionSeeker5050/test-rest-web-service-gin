@@ -31,9 +31,13 @@ func BinToHexController(c *gin.Context) {
 	}
 
 	// then call the bin to hex function from the calculator package and get the result
-	result := calculator.BinToHex(requestBody.Bin)
+	result, err2 := calculator.BinToHex(requestBody.Bin)
 
 	// errors should go here but for the moment the function doesnt return them
+	if err2 != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err2.Error()})
+		return
+	}
 
 	// then create the response data struct
 	responseData := BinToHexResponse{HexResult: result, CalcParams: requestBody}
