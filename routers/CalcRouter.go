@@ -14,19 +14,6 @@ func CalcRouter(routerObj *gin.Engine) *gin.Engine {
 	// add the router group using the address prefix
 	calculators := routerObj.Group(addressPrefix)
 
-	// some test requests:
-	calculators.GET("/calc", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Hello calc!",
-		})
-	})
-
-	calculators.GET("/calc2", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Hello calc2!",
-		})
-	})
-
 	// the real requests:
 
 	calculators.POST("/basic-calc", controller.BasicCalcController)
