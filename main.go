@@ -9,8 +9,7 @@ import (
 
 func main() {
 	router := gin.Default()
-	// router = SampleRouter(router)
-	router.NoRoute(controller.NoRouteController)
+	router.NoRoute(controller.NoRouteOrMethodController)
 
 	router = routers.CalcRouter(router)
 	router.Run(":5000")

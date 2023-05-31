@@ -10,17 +10,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNoRouteAPI(t *testing.T) {
+func TestNoRouteOrMethodAPI(t *testing.T) {
 	// we test routes that are not defined in the router
 
 	// Create a new Gin router
 	router := gin.Default()
 
 	// Register the route handler for no route
-	router.NoRoute(controller.NoRouteController)
+	router.NoRoute(controller.NoRouteOrMethodController)
 
 	// Create 3 new HTTP GET requests for registered routes
-	req1, _ := http.NewRequest("GET", "/api/v1/calculator/blabla", nil)
+	req1, _ := http.NewRequest("GET", "/api/v1/calculator/basic-calc", nil)
 	req2, _ := http.NewRequest("GET", "/api/v1/blablabla", nil)
 	req3, _ := http.NewRequest("GET", "/blablabla", nil)
 
