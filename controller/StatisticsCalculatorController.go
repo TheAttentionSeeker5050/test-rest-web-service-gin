@@ -20,6 +20,7 @@ type StatisticsCalculatorResponse struct {
 	MedianResult float64                     `json:"median"`
 	StdDevResult float64                     `json:"standardDeviation"`
 	CalcParams   StatisticsCalculatorRequest `json:"calculatorInputs"`
+	Error        string                      `json:"error"`
 }
 
 // the api handler controller function
@@ -29,7 +30,16 @@ func StatisticsCalculatorController(c *gin.Context) {
 
 	// then bind the request body to the struct and check for errors
 	if err := c.ShouldBindJSON(&requestBody); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+
+		responseData := StatisticsCalculatorResponse{
+			MeanResult:   0,
+			MedianResult: 0,
+			StdDevResult: 0,
+			CalcParams:   requestBody,
+			Error:        err.Error(),
+		}
+
+		c.JSON(400, responseData)
 		return
 	}
 
