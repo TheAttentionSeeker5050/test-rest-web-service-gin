@@ -1,6 +1,8 @@
 package routers
 
 import (
+	"workspace/controller"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -26,6 +28,8 @@ func CalcRouter(routerObj *gin.Engine) *gin.Engine {
 	})
 
 	// the real requests:
+
+	routerObj.GET(addressPrefix+"/basic-calc", controller.BasicCalcController)
 
 	return routerObj
 }
