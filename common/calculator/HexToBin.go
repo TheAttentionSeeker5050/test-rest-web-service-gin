@@ -1,15 +1,21 @@
 package calculator
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 )
 
-func HexToBin(hex string) string {
+func HexToBin(hex string) (string, error) {
 	// convert a hex string to bin
 
 	// name the result variable
 	var result string = ""
+
+	// detect if the bin input string is empty
+	if len(hex) == 0 {
+		return "", errors.New("Invalid hex string, no empty strings allowed")
+	}
 
 	// convert hex to decimal
 	for i := 0; i < len(hex); i++ {
@@ -18,7 +24,7 @@ func HexToBin(hex string) string {
 
 		// display parse errors if any
 		if err != nil {
-			return "error"
+			return "", errors.New("Invalid hex string")
 		}
 
 		// convert decimal to bin
@@ -36,6 +42,6 @@ func HexToBin(hex string) string {
 	}
 
 	// dec, err := strconv.ParseInt(bin, 16, 0)
-	return result
+	return result, nil
 
 }

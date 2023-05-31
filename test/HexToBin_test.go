@@ -7,11 +7,13 @@ import (
 
 func TestHexToBin(t *testing.T) {
 
-	var has string = calculator.HexToBin("147F")
+	has, err := calculator.HexToBin("147F")
 	// var expected string = "0001010001111111"
 	var expected string = "0001010001111111"
 
-	if has != expected {
+	if err != nil {
+		t.Errorf("There was an error with the calculation %v ", err)
+	} else if has != expected {
 		t.Errorf("Expected %v but got %v", expected, has)
 	} else {
 		t.Log("Success", has)
@@ -20,22 +22,26 @@ func TestHexToBin(t *testing.T) {
 
 func TestHexToBinInvalidHexString(t *testing.T) {
 
-	var has string = calculator.HexToBin("147FHIJK")
+	has, err := calculator.HexToBin("147FHIJK")
 	var expected string = "error"
 
-	if has != expected {
+	if err != nil {
+		t.Log("This test case launched an error, as it should have:", err)
+	} else if has != expected {
 		t.Errorf("Expected %v but got %v", expected, has)
 	} else {
 		t.Log("Success", has)
 	}
 }
 
-func TestHexToBinCharParam(t *testing.T) {
+func TestHexToBinOneCharParam(t *testing.T) {
 
-	var has string = calculator.HexToBin("F")
+	has, err := calculator.HexToBin("F")
 	var expected string = "1111"
 
-	if has != expected {
+	if err != nil {
+		t.Log("This test case launched an error, as it should have:", err)
+	} else if has != expected {
 		t.Errorf("Expected %v but got %v", expected, has)
 	} else {
 		t.Log("Success", has)
