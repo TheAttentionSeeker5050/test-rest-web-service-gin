@@ -28,5 +28,8 @@ func main() {
 }
 
 func loadDatabase() {
-	config.ConnectDB()
+	err := config.ConnectDB()
+	if err != nil {
+		panic(err)
+	}
 }
