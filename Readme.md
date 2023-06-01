@@ -89,3 +89,7 @@ The reason for that is because I am not publishing the main, as I am discovering
 ![Screenshots of git tree on this project](screenshot-git-branches.png)
 
 Above you can see how I am doing my branching well enough, you are able to observe that I am making changes on different branches and then pulling and merging the changes to main branch. I could be more sophisticated pushes on specific directories or files, pull request, etc. but as this is a guy programmer project so I don't see the need for that.
+
+### #2 Added Postgres database connection
+
+Added a basic database connection, I may add environment variables, but for now I left the default username, port and password and loopback IP address so I don't see a need for now. As I previously told, this is a tinker server and I can refine it later. All automated for basic db connection and sample query tests passed at this moment. All components of the server as of now run well and pass unit tests, and the API calls get the desired results.
