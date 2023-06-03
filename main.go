@@ -32,7 +32,7 @@ func loadDatabase() *gorm.DB {
 	db, err := config.ConnectDB()
 	if err != nil {
 		panic(err)
-		return nil
+		// return nil
 	}
 
 	return db
