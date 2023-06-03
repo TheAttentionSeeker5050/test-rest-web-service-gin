@@ -5,6 +5,7 @@ import (
 	//PostgreSQL Driver
 	"errors"
 	"fmt"
+	"workspace/model"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -19,6 +20,9 @@ func ConnectDB() (*gorm.DB, error) {
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", "127.0.0.1", "postgres", "mysecretpassword", "test_db", "5432")
 	Database, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+
+	// auto migrate the models
+	Database.AutoMigrate(&model.TestModel{})
 
 	if err != nil {
 		// if there is an error opening the connection, handle it
