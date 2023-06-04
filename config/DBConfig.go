@@ -17,7 +17,8 @@ var Database *gorm.DB
 func ConnectDB() (*gorm.DB, error) {
 	var err error
 
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", "127.0.0.1", "postgres", "mysecretpassword", "test_db", "5432")
+	// dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", "127.0.0.1", "postgres", "mysecretpassword", "test_db", "5432") // this is on the wsl machine
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", "192.168.0.99", "nicolas", "mysecretpassword", "my_first_golang_db", "32831") // this is on a docker container
 	Database, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	// auto migrate the models

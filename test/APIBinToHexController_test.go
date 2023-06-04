@@ -6,18 +6,32 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"workspace/config"
 	"workspace/controller"
+	"workspace/model"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestBinToHexController(t *testing.T) {
+
+	// initialize the database
+	db, err := config.MockDBSetup(t)
+	assert.Nil(t, err)
+
+	db.AutoMigrate(&model.CalculatorHistoryModel{})
+
+	// drop all previous entries from the table
+	db.Where("user_id > ?", 0).Delete(&model.CalculatorHistoryModel{})
+
 	// Create a new Gin router
 	router := gin.Default()
 
 	// Register the route handler
-	router.POST("/api/v1/calculator/bin-to-hex", controller.BinToHexController)
+	router.POST("/api/v1/calculator/bin-to-hex", func(ctx *gin.Context) {
+		controller.BinToHexController(ctx, db)
+	})
 
 	// Define the request payload
 	requestBody1 := controller.BinToHexRequest{
