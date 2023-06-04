@@ -82,6 +82,9 @@ func TestSampleQueryUsingMockDB(t *testing.T) {
 		assert.Equal(t, "password", resultStruct.Password)
 		assert.Equal(t, "username", resultStruct.UserName)
 
+		// drop all entries from the table
+		db.Where("user_id > ?", 0).Delete(&model.TestModel{})
+
 		return nil
 	})
 	assert.NoError(t, err)

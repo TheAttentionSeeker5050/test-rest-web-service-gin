@@ -21,8 +21,10 @@ func CreateCalculatorHistoryModelInstance(db *gorm.DB, model *CalculatorHistoryM
 
 // add get list of all instances query method here
 func GetAllCalculatorHistoryModelInstances(db *gorm.DB, model *[]CalculatorHistoryModel) *gorm.DB {
+	// return multiple records
 	result := db.Find(&model)
 	return result
+
 }
 
 // add get by last element query method here

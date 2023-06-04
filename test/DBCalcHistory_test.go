@@ -143,6 +143,24 @@ func TestCalcHistoryDBQueries(t *testing.T) {
 		assert.Equal(t, calcHistoryModel.Params, calcHistoryModelFromDb.Params)
 		assert.Equal(t, calcHistoryModel.Results, calcHistoryModelFromDb.Results)
 
+		// test the list query
+		var calcHistoryModelList []model.CalculatorHistoryModel
+
+		// create a query to retrieve the data from the db and save it on the calcHistoryModelFromDb structure
+		model.GetAllCalculatorHistoryModelInstances(db, &calcHistoryModelList)
+
+		// validate if the data retrieved from the db matches
+		assert.Equal(t, calcHistoryModel.UserName, calcHistoryModelList[0].UserName)
+		assert.Equal(t, calcHistoryModel.CalculatorType, calcHistoryModelList[0].CalculatorType)
+		assert.Equal(t, calcHistoryModel.Params, calcHistoryModelList[0].Params)
+		assert.Equal(t, calcHistoryModel.Results, calcHistoryModelList[0].Results)
+
+		// validate if the size of the list is 1
+		assert.Equal(t, 1, len(calcHistoryModelList))
+
+		// drop all entries from the table
+		db.Where("id > 0").Delete(&model.CalculatorHistoryModel{})
+
 		return nil
 	})
 	assert.NoError(t, err)
