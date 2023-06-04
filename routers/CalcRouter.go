@@ -18,7 +18,9 @@ func CalcRouter(routerObj *gin.Engine, db *gorm.DB) *gin.Engine {
 
 	// the real requests:
 
-	calculators.POST("/basic-calc", controller.BasicCalcController)
+	calculators.POST("/basic-calc", func(ctx *gin.Context) {
+		controller.BasicCalcController(ctx, db)
+	})
 	calculators.POST("/bin-to-hex", controller.BinToHexController)
 	calculators.POST("/hex-to-bin", controller.HexToBinController)
 	calculators.POST("/statistics-calc", controller.StatisticsCalculatorController)

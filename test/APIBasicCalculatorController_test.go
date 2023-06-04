@@ -6,23 +6,29 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"workspace/config"
 	"workspace/controller"
+	"workspace/routers"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestBasicCalcController(t *testing.T) {
+	// initialize the database
+	db, _ := config.MockDBSetup()
+
 	// Create a new Gin router
 	router := gin.Default()
+	router = routers.CalcRouter(router, db)
 
-	// Register the route handler
-	router.POST("/api/v1/calculator/basic-calc", controller.BasicCalcController)
+	// // Register the route handler
+	// router.POST("/api/v1/calculator/basic-calc", controller.BasicCalcController(db))
 
 	// Define the request payload
 	requestBody := controller.BasicCalcRequest{
-		Num1:     1,
-		Num2:     2,
+		Num1:     1.0,
+		Num2:     2.0,
 		Operator: "+",
 	}
 
