@@ -7,3 +7,5 @@ type TestModel struct {
 	Password string `json:"password" orm:"size(64)"`
 	UserName string `json:"user_name" orm:"size(32)"`
 }
+
+// create query methods for this model
