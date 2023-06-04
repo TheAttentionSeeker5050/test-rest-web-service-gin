@@ -119,7 +119,8 @@ func TestSampleQueryUsingMockDB(t *testing.T) {
 		db.AutoMigrate(&model.TestModel{})
 
 		// create a save query
-		result := db.Create(&testModel)
+		// result := db.Create(&testModel)
+		result := model.CreateTestModelInstance(db, &testModel)
 
 		// check if there is an error with the query
 		assert.Nil(t, result.Error)
@@ -131,7 +132,8 @@ func TestSampleQueryUsingMockDB(t *testing.T) {
 		var resultStruct model.TestModel
 
 		// create a find query
-		db.First(&resultStruct)
+		// db.First(&resultStruct)
+		model.GetLastTestModelInstance(db, &resultStruct)
 
 		// check if the result is correct
 		assert.Equal(t, 1, resultStruct.UserId)
