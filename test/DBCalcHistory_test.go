@@ -26,7 +26,7 @@ func TestCalcHistorySaveToDb(t *testing.T) {
 	}
 
 	// connect to the database
-	db, err := config.ConnectDB()
+	db, err := config.MockDBSetup()
 
 	// check if there is an error with the connection
 	if err != nil {

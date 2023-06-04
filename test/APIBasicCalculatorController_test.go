@@ -8,7 +8,6 @@ import (
 	"testing"
 	"workspace/config"
 	"workspace/controller"
-	"workspace/routers"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
@@ -20,10 +19,12 @@ func TestBasicCalcController(t *testing.T) {
 
 	// Create a new Gin router
 	router := gin.Default()
-	router = routers.CalcRouter(router, db)
+	// router = routers.CalcRouter(router, db)
 
 	// // Register the route handler
-	// router.POST("/api/v1/calculator/basic-calc", controller.BasicCalcController(db))
+	router.POST("/api/v1/calculator/basic-calc", func(ctx *gin.Context) {
+		controller.BasicCalcController(ctx, db)
+	})
 
 	// Define the request payload
 	requestBody := controller.BasicCalcRequest{
