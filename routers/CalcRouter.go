@@ -21,9 +21,15 @@ func CalcRouter(routerObj *gin.Engine, db *gorm.DB) *gin.Engine {
 	calculators.POST("/basic-calc", func(ctx *gin.Context) {
 		controller.BasicCalcController(ctx, db)
 	})
-	calculators.POST("/bin-to-hex", controller.BinToHexController)
-	calculators.POST("/hex-to-bin", controller.HexToBinController)
-	calculators.POST("/statistics-calc", controller.StatisticsCalculatorController)
+	calculators.POST("/bin-to-hex", func(ctx *gin.Context) {
+		controller.BinToHexController(ctx, db)
+	})
+	calculators.POST("/hex-to-bin", func(ctx *gin.Context) {
+		controller.HexToBinController(ctx, db)
+	})
+	calculators.POST("/statistics-calc", func(ctx *gin.Context) {
+		controller.StatisticsCalculatorController(ctx, db)
+	})
 	// calculators.GET("/history", func(c *gin.Context) {
 	// 	c.String(200, "**API Calculator History** \nThis should make use of the server database")
 	// })

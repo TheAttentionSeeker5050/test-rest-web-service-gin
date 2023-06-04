@@ -6,32 +6,44 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"workspace/config"
 	"workspace/controller"
+	"workspace/model"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestHexToBinController(t *testing.T) {
+func TestBinToHexController(t *testing.T) {
+
+	// initialize the database
+	db, err := config.MockDBSetup(t)
+	assert.Nil(t, err)
+
+	db.AutoMigrate(&model.CalculatorHistoryModel{})
+
+	// drop all previous entries from the table
+	db.Where("user_id > ?", 0).Delete(&model.CalculatorHistoryModel{})
 
 	// Create a new Gin router
 	router := gin.Default()
 
 	// Register the route handler
-	router.POST("/api/v1/calculator/hex-to-bin", controller.HexToBinController)
+	router.POST("/api/v1/calculator/bin-to-hex", func(ctx *gin.Context) {
+		controller.BinToHexController(ctx, db)
+	})
 
 	// Define the request payload
-	requestBody1 := controller.HexToBinRequest{
-		Hex: "A",
+	requestBody1 := controller.BinToHexRequest{
+		Bin: "1010",
 	}
 
-	requestBody2 := controller.HexToBinRequest{
-		Hex: "AF",
+	requestBody2 := controller.BinToHexRequest{
+		Bin: "1010001111111",
 	}
 
-	// this request body should return an error
-	requestBody3 := controller.HexToBinRequest{
-		Hex: "AFG",
+	requestBody3 := controller.BinToHexRequest{
+		Bin: "1010001111111a",
 	}
 
 	jsonBody1, _ := json.Marshal(requestBody1)
@@ -39,13 +51,13 @@ func TestHexToBinController(t *testing.T) {
 	jsonBody3, _ := json.Marshal(requestBody3)
 
 	// Create a new HTTP POST request with the JSON payload
-	req1, _ := http.NewRequest("POST", "/api/v1/calculator/hex-to-bin", bytes.NewBuffer(jsonBody1))
+	req1, _ := http.NewRequest("POST", "/api/v1/calculator/bin-to-hex", bytes.NewBuffer(jsonBody1))
 	req1.Header.Set("Content-Type", "application/json")
 
-	req2, _ := http.NewRequest("POST", "/api/v1/calculator/hex-to-bin", bytes.NewBuffer(jsonBody2))
+	req2, _ := http.NewRequest("POST", "/api/v1/calculator/bin-to-hex", bytes.NewBuffer(jsonBody2))
 	req2.Header.Set("Content-Type", "application/json")
 
-	req3, _ := http.NewRequest("POST", "/api/v1/calculator/hex-to-bin", bytes.NewBuffer(jsonBody3))
+	req3, _ := http.NewRequest("POST", "/api/v1/calculator/bin-to-hex", bytes.NewBuffer(jsonBody3))
 	req3.Header.Set("Content-Type", "application/json")
 
 	// Perform the request1
@@ -56,14 +68,15 @@ func TestHexToBinController(t *testing.T) {
 	assert.Equal(t, http.StatusOK, resp.Code)
 
 	// Parse the response body
-	var responseData controller.HexToBinResponse
+	var responseData controller.BinToHexResponse
 	json.Unmarshal(resp.Body.Bytes(), &responseData)
 
 	// Assert the response data
-	assert.Equal(t, "1010", responseData.BinResult)
+	assert.Equal(t, "A", responseData.HexResult)
 
 	// Perform the request2
 	resp = httptest.NewRecorder()
+
 	router.ServeHTTP(resp, req2)
 
 	// Assert the response status code
@@ -73,13 +86,14 @@ func TestHexToBinController(t *testing.T) {
 	json.Unmarshal(resp.Body.Bytes(), &responseData)
 
 	// Assert the response data
-	assert.Equal(t, "10101111", responseData.BinResult)
+	assert.Equal(t, "147F", responseData.HexResult)
 
 	// delete previous response data, because this next request will return in an error
-	responseData = controller.HexToBinResponse{}
+	responseData = controller.BinToHexResponse{}
 
 	// Perform the request3
 	resp = httptest.NewRecorder()
+
 	router.ServeHTTP(resp, req3)
 
 	// Assert the response status code
@@ -88,8 +102,8 @@ func TestHexToBinController(t *testing.T) {
 	// Parse the response body
 	json.Unmarshal(resp.Body.Bytes(), &responseData)
 
-	// Assert the response data - the result should be empty and the error should not be empty
-	assert.Equal(t, "", responseData.BinResult)
+	// Assert the response data is empty and the error is not empty
+	assert.Equal(t, "", responseData.HexResult)
 	assert.NotEmpty(t, responseData.Error)
 
 }

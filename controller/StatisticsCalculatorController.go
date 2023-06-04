@@ -3,10 +3,13 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 	"workspace/common/calculator"
+	"workspace/model"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // first add the request params structure, we add variable params to the request *args or ...int
@@ -24,7 +27,7 @@ type StatisticsCalculatorResponse struct {
 }
 
 // the api handler controller function
-func StatisticsCalculatorController(c *gin.Context) {
+func StatisticsCalculatorController(c *gin.Context, db *gorm.DB) {
 	// first get the request body struct
 	var requestBody StatisticsCalculatorRequest
 
@@ -51,6 +54,25 @@ func StatisticsCalculatorController(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err2.Error()})
 		return
 	}
+
+	// save the result to the database
+
+	// create the response data
+	var calcHistoryModel model.CalculatorHistoryModel
+
+	// first convert the result to string
+
+	// add the data to the model and convert the result abd request body struct contents to string
+	calcHistoryModel.UserName = "anonymous"
+	calcHistoryModel.CalculatorType = "StatisticsCalculator"
+	// print all the numbers in the array to the params using fmt.Sprintf method separated by commas
+	calcHistoryModel.Params = fmt.Sprintf("%v", requestBody.Numbers)
+	// format the mean, median and standard deviation results to 2 decimal places separated by commas
+	calcHistoryModel.Results = fmt.Sprintf("%.2f, %.2f, %.2f", mean, median, standardDeviation)
+
+	// save the model to the database and return error
+
+	model.CreateCalculatorHistoryModelInstance(db, &calcHistoryModel)
 
 	// then create the response data struct
 	responseData := StatisticsCalculatorResponse{

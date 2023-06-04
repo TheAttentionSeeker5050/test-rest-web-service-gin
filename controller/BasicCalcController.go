@@ -44,7 +44,7 @@ func BasicCalcController(c *gin.Context, db *gorm.DB) {
 	// first convert the result to string
 
 	// add the data to the model and convert the result abd request body struct contents to string
-	calcHistoryModel.UserName = "anon2"
+	calcHistoryModel.UserName = "anonymous"
 	calcHistoryModel.CalculatorType = "BasicCalculator"
 	calcHistoryModel.Params = fmt.Sprintf("%.2f", requestBody.Num1) + ", " + fmt.Sprintf("%.2f", requestBody.Num2) + ", " + requestBody.Operator
 	// calcHistoryModel.Results = fmt.Sprintf("%f", other.RoundFloat(result, 2))

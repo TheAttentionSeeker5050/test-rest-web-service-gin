@@ -3,8 +3,10 @@ package controller
 import (
 	"net/http"
 	"workspace/common/calculator"
+	"workspace/model"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // add the request params structure
@@ -20,7 +22,7 @@ type HexToBinResponse struct {
 }
 
 // the api handler controller function
-func HexToBinController(c *gin.Context) {
+func HexToBinController(c *gin.Context, db *gorm.DB) {
 	var requestBody HexToBinRequest
 
 	// then bind the request body to the struct and check for errors
@@ -40,6 +42,24 @@ func HexToBinController(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err2.Error()})
 		return
 	}
+
+	// save the result to the database
+
+	// create the response data
+	var calcHistoryModel model.CalculatorHistoryModel
+
+	// first convert the result to string
+
+	// add the data to the model and convert the result abd request body struct contents to string
+	calcHistoryModel.UserName = "anonymous"
+	calcHistoryModel.CalculatorType = "HexToBinConverter"
+	calcHistoryModel.Params = requestBody.Hex
+	// calcHistoryModel.Results = fmt.Sprintf("%f", other.RoundFloat(result, 2))
+	calcHistoryModel.Results = result
+
+	// save the model to the database and return error
+
+	model.CreateCalculatorHistoryModelInstance(db, &calcHistoryModel)
 
 	// then create the response data struct
 	responseData := HexToBinResponse{BinResult: result, CalcParams: requestBody}
