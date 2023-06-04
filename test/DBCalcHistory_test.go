@@ -113,8 +113,35 @@ func TestCalcHistoryDBQueries(t *testing.T) {
 
 		// the struct that will hold the data to be saved
 		calcHistoryModel = model.CalculatorHistoryModel{
-			UserName: "anonymous",
+			UserName:       "anonymous",
+			CalculatorType: "BasicCalculator",
+			Params:         "1,2,'+'",
+			Results:        "3",
 		}
+
+		// auto migrate any changes
+		db.AutoMigrate(&model.CalculatorHistoryModel{})
+
+		// create a save query
+		resultCreate := model.CreateCalculatorHistoryModelInstance(db, &calcHistoryModel)
+
+		// check if there is an error with the query
+		assert.Nil(t, resultCreate.Error)
+
+		// validate if the data was saved on the db using the result of the query
+		assert.Equal(t, 1, int(resultCreate.RowsAffected))
+
+		// create a query to retrieve the data from the db
+		var calcHistoryModelFromDb model.CalculatorHistoryModel
+
+		// create a query to retrieve the data from the db and save it on the calcHistoryModelFromDb structure
+		model.GetLastCalculatorHistoryModelInstance(db, &calcHistoryModelFromDb)
+
+		// validate if the data retrieved from the db matches
+		assert.Equal(t, calcHistoryModel.UserName, calcHistoryModelFromDb.UserName)
+		assert.Equal(t, calcHistoryModel.CalculatorType, calcHistoryModelFromDb.CalculatorType)
+		assert.Equal(t, calcHistoryModel.Params, calcHistoryModelFromDb.Params)
+		assert.Equal(t, calcHistoryModel.Results, calcHistoryModelFromDb.Results)
 
 		return nil
 	})
