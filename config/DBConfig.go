@@ -9,7 +9,6 @@ import (
 
 	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
@@ -33,19 +32,4 @@ func ConnectDB() (*gorm.DB, error) {
 		fmt.Println("Successfully connected to the database")
 		return Database, nil
 	}
-}
-
-func connectDBForTest() (*gorm.DB, error) {
-	var err error
-
-	// connect to sqlite test db for testing (called test_db)
-	Database, err = gorm.Open(sqlite.Open("test_db"), &gorm.Config{})
-
-	// check if there is an error with the connection
-	if err != nil {
-		return nil, errors.New("Error on DB connection:\n" + err.Error())
-	} else {
-		return Database, nil
-	}
-
 }
