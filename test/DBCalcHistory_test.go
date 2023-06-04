@@ -1,9 +1,16 @@
 package test
 
 import (
+	"fmt"
 	"testing"
 	"workspace/config"
 	"workspace/model"
+
+	"github.com/ory/dockertest/v3"
+	_ "github.com/ory/dockertest/v3/docker"
+	"github.com/stretchr/testify/assert"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 // here we will test that the user can save and retrieve the calc history to and from the db
@@ -82,4 +89,39 @@ func TestCalcHistorySaveToDb(t *testing.T) {
 }
 
 // here we will test that the user can remove the calc history from the db
-func TestCalcHistoryRemoveFromDb(t *testing.T) {}
+func TestCalcHistoryDBQueries(t *testing.T) {
+	// Initialize the Docker pool
+	pool, err := dockertest.NewPool("")
+	assert.NoError(t, err)
+
+	// Run a PostgreSQL container
+	resource, err := pool.Run("postgres", "13", []string{"POSTGRES_PASSWORD=secret"})
+	assert.NoError(t, err)
+
+	// Wait for the container to be ready
+	err = pool.Retry(func() error {
+		db, err := gorm.Open(postgres.New(postgres.Config{
+			// DSN: fmt.Sprintf("host=localhost port=%s user=postgres password=secret dbname=postgres sslmode=disable", resource.GetPort("5432/tcp")),
+			DSN: fmt.Sprintf("host=192.168.0.99 port=32783 user=postgres password=secret dbname=postgres sslmode=disable"),
+		}), &gorm.Config{})
+		assert.Nil(t, err)
+
+		// Run your database migration or setup logic here
+
+		// define the struct that will hold the result
+		var calcHistoryModel model.CalculatorHistoryModel
+
+		// the struct that will hold the data to be saved
+		calcHistoryModel = model.CalculatorHistoryModel{
+			UserName: "anonymous",
+		}
+
+		return nil
+	})
+	assert.NoError(t, err)
+
+	// Perform your test operations using the mock PostgreSQL database
+	resource.GetPort("5432/tcp") // returns the exposed port for the PostgreSQL instance
+	// When you're done, kill and remove the container and check if there is any error
+	assert.NoError(t, pool.Purge(resource))
+}
