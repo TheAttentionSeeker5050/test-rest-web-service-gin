@@ -8,6 +8,7 @@ import (
 	"testing"
 	"workspace/config"
 	"workspace/controller"
+	"workspace/model"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
@@ -15,7 +16,12 @@ import (
 
 func TestBasicCalcController(t *testing.T) {
 	// initialize the database
-	db, _ := config.MockDBSetup()
+	db, _ := config.MockDBSetup(t)
+
+	db.AutoMigrate(&model.CalculatorHistoryModel{})
+
+	// drop all previous entries from the table
+	db.Where("user_id > ?", 0).Delete(&model.CalculatorHistoryModel{})
 
 	// Create a new Gin router
 	router := gin.Default()

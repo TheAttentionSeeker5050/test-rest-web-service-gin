@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"testing"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -10,28 +11,54 @@ import (
 	_ "github.com/ory/dockertest/v3/docker"
 )
 
-func MockDBSetup() (*gorm.DB, error) {
+func MockDBSetup(t *testing.T) (*gorm.DB, error) {
 	// Initialize the Docker pool
-	pool, _ := dockertest.NewPool("")
+	// Create a new instance of the Docker pool
+	pool, err := dockertest.NewPool("")
+	if err != nil {
+		t.Fatalf("Failed to create Docker pool: %s", err)
+	}
 
-	// Run a PostgreSQL container
-	resource, _ := pool.Run("postgres", "13", []string{"POSTGRES_PASSWORD=secret"})
-	var database *gorm.DB
-	// Wait for the container to be ready
-	err := pool.Retry(func() error {
-		db, err := gorm.Open(postgres.New(postgres.Config{
-			DSN: fmt.Sprintf("host=192.168.0.99 port=32783 user=postgres password=secret dbname=postgres sslmode=disable"),
-			// DSN: fmt.Sprintf("host=localhost port=%s user=postgres password=secret dbname=postgres sslmode=disable", resource.GetPort("5432/tcp")),
-		}), &gorm.Config{})
-		if err != nil {
-			return err
-		} else {
-			database = db
-			return nil
+	// Set the environment variables for the PostgreSQL container
+	env := []string{
+		"POSTGRES_USER=postgres",
+		"POSTGRES_PASSWORD=mySecretPassword",
+		"POSTGRES_DB=test_db",
+		"DOCKER_MACHINE_NAME=postgres_container",
+	}
+
+	// Define the Docker container run options
+	runOpts := dockertest.RunOptions{
+		Repository: "postgres",
+		Tag:        "13",
+		Env:        env,
+	}
+
+	// Start the PostgreSQL container
+	resource, err := pool.RunWithOptions(&runOpts)
+	if err != nil {
+		t.Fatalf("Failed to start PostgreSQL container: %s", err)
+	}
+	defer func() {
+		// Clean up the Docker container
+		if err := pool.Purge(resource); err != nil {
+			t.Fatalf("Failed to clean up PostgreSQL container: %s", err)
 		}
-	})
+	}()
 
-	resource = resource
+	// Get the host and port for connecting to the PostgreSQL container
+	host := "192.168.0.99"
+	// port := resource.GetPort("5433/tcp")
+	port := "32783"
 
-	return database, err
+	// Create the DSN string for the PostgreSQL connection
+	dsn := fmt.Sprintf("host=%s port=%s user=postgres password=mySecretPassword dbname=test_db sslmode=disable", host, port)
+
+	// Connect to the PostgreSQL database
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		t.Fatalf("Failed to connect to PostgreSQL: %s", err)
+	}
+
+	return db, err
 }
