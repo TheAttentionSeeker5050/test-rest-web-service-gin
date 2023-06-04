@@ -4,9 +4,11 @@ import (
 	"workspace/controller"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
-func CalcRouter(routerObj *gin.Engine) *gin.Engine {
+// we should also import the database as we are going to use it in some of our routes
+func CalcRouter(routerObj *gin.Engine, db *gorm.DB) *gin.Engine {
 
 	// add the address prefix
 	var addressPrefix string = "/api/v1/calculators"

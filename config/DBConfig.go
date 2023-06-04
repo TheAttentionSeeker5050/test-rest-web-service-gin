@@ -7,10 +7,9 @@ import (
 	"fmt"
 	"workspace/model"
 
+	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-
-	_ "github.com/lib/pq"
 )
 
 var Database *gorm.DB
@@ -23,6 +22,7 @@ func ConnectDB() (*gorm.DB, error) {
 
 	// auto migrate the models
 	Database.AutoMigrate(&model.TestModel{})
+	Database.AutoMigrate(&model.CalculatorHistoryModel{})
 
 	if err != nil {
 		// if there is an error opening the connection, handle it

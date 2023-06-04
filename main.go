@@ -7,6 +7,7 @@ import (
 
 	"github.com/astaxie/beego/orm"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 var ORM orm.Ormer
@@ -14,7 +15,7 @@ var ORM orm.Ormer
 func main() {
 
 	// Connect to the database
-	loadDatabase()
+	database := loadDatabase()
 
 	// config.ConnectToDb()
 	// ORM = config.GetOrmObject()
@@ -22,14 +23,17 @@ func main() {
 	router := gin.Default()
 	router.NoRoute(controller.NoRouteOrMethodController)
 
-	router = routers.CalcRouter(router)
+	router = routers.CalcRouter(router, database)
 	router.Run(":5000")
 
 }
 
-func loadDatabase() {
-	_, err := config.ConnectDB()
+func loadDatabase() *gorm.DB {
+	db, err := config.ConnectDB()
 	if err != nil {
 		panic(err)
+		// return nil
 	}
+
+	return db
 }
