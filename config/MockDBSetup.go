@@ -16,7 +16,6 @@ import (
 
 func MockDBSetup(t *testing.T) (*gorm.DB, error) {
 	// get the absolute path of the env file
-	// envPath, err := filepath.Join(filepath.Abs("../"), ".env")
 
 	// Initialize the Docker pool
 	// Load environment variables from .env file, this is for the local server, on production, the env variables are set on the server
