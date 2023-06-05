@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"workspace/config"
 	"workspace/controller"
@@ -22,7 +23,9 @@ func main() {
 	}
 
 	// configure Oauth2
-	config.Oauth2Config()
+	oauth2ConfigObj := config.Oauth2Config()
+
+	fmt.Println("auth config:", oauth2ConfigObj)
 
 	// Connect to the database
 	database := loadDatabase()
