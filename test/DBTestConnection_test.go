@@ -5,15 +5,26 @@ import (
 	"workspace/config"
 	"workspace/model"
 
+	"github.com/joho/godotenv"
 	_ "github.com/ory/dockertest/v3/docker"
 	"github.com/stretchr/testify/assert"
 )
 
+// test the connection of the dev database
 func TestConnectDB(t *testing.T) {
-	_, err := config.ConnectDB()
+	// load the environment variables
+	err := godotenv.Load("../.env")
 
 	if err != nil {
-		t.Errorf("There was an error with the db connection: %v ", err)
+		t.Errorf("There was an error loading the env file: %v ", err)
+	} else {
+		t.Log("Success")
+	}
+
+	_, err2 := config.ConnectDB()
+
+	if err2 != nil {
+		t.Errorf("There was an error with the db connection: %v ", err2)
 	} else {
 		t.Log("Success")
 	}
