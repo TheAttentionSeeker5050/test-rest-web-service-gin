@@ -93,3 +93,10 @@ Above you can see how I am doing my branching well enough, you are able to obser
 ### #2 Added Postgres database connection
 
 Added a basic database connection, I may add environment variables, but for now I left the default username, port and password and loopback IP address so I don't see a need for now. As I previously told, this is a tinker server and I can refine it later. All automated for basic db connection and sample query tests passed at this moment. All components of the server as of now run well and pass unit tests, and the API calls get the desired results.
+
+### #3 Improved postgres databased, and implemented more to api views
+
+Improved Databases, I have now a docker persistent container for it, and also have a test docker mock database that recreates and deletes on every run. All the calculation api calls save records to this database and a listing of all of them can be called with /api/v1/calculators/history using a get request. This project now has environment variables, for extra layer of security. Added 3 user input validation methods, for password, password confirmation matches and email, as well as user database methods and models.
+
+At this moment I am in the process of implementing sessions and user authorization using oauth2, and adding user api endpoints. I will see how I can implement reliability and security features such as access permissions and DDoS attacks protections, as well as request encryptions.
+
