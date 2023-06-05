@@ -21,6 +21,9 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
+	// configure Oauth2
+	config.Oauth2Config()
+
 	// Connect to the database
 	database := loadDatabase()
 
