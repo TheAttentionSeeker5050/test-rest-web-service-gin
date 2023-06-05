@@ -32,3 +32,10 @@ func GetUserModelInstanceByUserName(db *gorm.DB, model *UserModel, userName stri
 	result := db.Where("user_name = ?", userName).First(&model)
 	return result
 }
+
+// add get user by email query method here
+func GetUserModelInstanceByEmail(db *gorm.DB, model *UserModel, email string) *gorm.DB {
+	// return single based on email
+	result := db.Where("email = ?", email).First(&model)
+	return result
+}

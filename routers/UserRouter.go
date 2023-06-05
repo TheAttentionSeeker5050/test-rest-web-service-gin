@@ -17,11 +17,6 @@ func UserRouter(routerObj *gin.Engine, db *gorm.DB) *gin.Engine {
 
 	// add the user routes
 	userRoutes.POST("/register", func(ctx *gin.Context) {
-		// display text for testing purposes
-		// ctx.JSON(200, gin.H{
-		// 	"message": "register",
-		// })
-
 		// call the controller
 		user.RegisterUserController(ctx, db)
 	})

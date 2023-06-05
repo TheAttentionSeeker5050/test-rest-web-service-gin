@@ -75,6 +75,22 @@ func RegisterUserController(c *gin.Context, db *gorm.DB) {
 		return
 	}
 
+	// check if the user name is valid
+	userNameIsValid := validators.ValidateUserName(requestBody.UserName)
+
+	// if user name is not valid
+	if userNameIsValid == false {
+		c.JSON(http.StatusBadRequest,
+			// a custom response data structure for request error
+			RegisterResponse{
+				UserName: "",
+				Message:  "Oops! Something went wrong!",
+				Error:    "User name is not valid!\nPlease use at least 6 characters, no special characters, no spaces, and start with letter. Your new username can also contain (but not start with) numbers, and the special characters _ and -",
+			},
+		)
+		return
+	}
+
 	// check if the user name is already taken
 	userNameIsTaken := validators.ValidateUserNameIsTaken(db, requestBody.UserName)
 
