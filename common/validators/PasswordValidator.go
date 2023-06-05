@@ -1,20 +1,6 @@
 package validators
 
-import (
-	"regexp"
-)
-
 // add password validation method here, it should return true if the password is valid
-func ValidatePasswordWithRegex(password string) bool {
-	// Invalid password pattern
-
-	// Matches passwords that do not meet the criteria: at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character
-	pattern := `^(?!.*[A-Z])(?!.*[a-z])(?!.*\d)(?!.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$`
-
-	match, _ := regexp.MatchString(pattern, password)
-	return !match
-}
-
 func ValidatePassword(password string) bool {
 	// Password validation criteria
 	minLength := 8
