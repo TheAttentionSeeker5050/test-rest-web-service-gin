@@ -25,8 +25,6 @@ func ConnectDB() (*gorm.DB, error) {
 	password := os.Getenv("DB_LOCAL_PASSWORD")
 	dbname := os.Getenv("DB_LOCAL_NAME")
 
-	// dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", "192.168.0.99", "nicolas", "mysecretpassword", "my_first_golang_db", "32831") // this is on docker container
-
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", host, user, password, dbname, port) // this is on docker container
 
 	Database, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
