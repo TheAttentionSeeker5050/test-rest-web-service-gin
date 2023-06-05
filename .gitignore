@@ -1,0 +1,35 @@
+# gitignore for golang gin project
+
+# add the ignored file names and addresses for git
+# directories to ignore 
+bin/
+
+# files ignored for security reasons
+*.key
+*.pem
+*.crt
+*.csr
+*.srl
+.env
+
+
+
+
+# files to not be added to git
+*.log
+*.txt
+*.zip
+*.tar.gz
+*.tar
+*.gz
+*.rar
+*.7z
+*.exe
+
+# images
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.ico
+*.tif
