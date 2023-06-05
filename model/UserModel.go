@@ -14,18 +14,21 @@ type UserModel struct {
 
 // add create user query method here
 func CreateUserModelInstance(db *gorm.DB, model *UserModel) *gorm.DB {
+	// create new user and return the result
 	result := db.Create(&model)
 	return result
 }
 
 // add get user by id query method here
 func GetUserModelInstanceById(db *gorm.DB, model *UserModel, id int) *gorm.DB {
+	// return single based on id
 	result := db.First(&model, id)
 	return result
 }
 
 // add get user by user name query method here
 func GetUserModelInstanceByUserName(db *gorm.DB, model *UserModel, userName string) *gorm.DB {
+	// return single based on user name
 	result := db.Where("user_name = ?", userName).First(&model)
 	return result
 }

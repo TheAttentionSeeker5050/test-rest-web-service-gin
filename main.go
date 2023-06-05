@@ -30,13 +30,12 @@ func main() {
 	// Connect to the database
 	database := loadDatabase()
 
-	// config.ConnectToDb()
-	// ORM = config.GetOrmObject()
-
+	// declare router and routes
 	router := gin.Default()
 	router.NoRoute(controller.NoRouteOrMethodController)
+	router = routers.CalcRouter(router, database) // calculator routes
 
-	router = routers.CalcRouter(router, database)
+	// run router on port 5000
 	router.Run(":5000")
 
 }
