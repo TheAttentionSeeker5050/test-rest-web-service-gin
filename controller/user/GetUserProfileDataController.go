@@ -2,6 +2,7 @@ package user
 
 import (
 	"net/http"
+	"workspace/common/other"
 	"workspace/model"
 
 	"github.com/gin-gonic/gin"
@@ -25,9 +26,35 @@ func GetUserProfileDataController(c *gin.Context, db *gorm.DB) {
 	var userModel model.UserModel
 
 	// please add the get user profile id data logic from token here
+	// first get the token from the request header
+	tokenString := c.Request.Header.Get("Authorization")
+
+	// verify the token
+	tokenClaims, isTokenValid := other.VerifyAccessToken(tokenString)
+	if !isTokenValid {
+		// return the error
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": "Oops! Something went wrong!",
+			"error":   "Validation Error. Token is invalid!",
+		})
+		return
+	}
+
+	// get the user id from the token claims
+	userId := int(tokenClaims["user_id"].(float64))
+
+	// check if the user id is valid
+	if userId <= 0 {
+		// return the error
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": "Oops! Something went wrong!",
+			"error":   "Validation Error. Please login again!",
+		})
+		return
+	}
 
 	// get the user model from the context
-	modelInstaceResult := model.GetUserModelInstanceById(db, &userModel, 1)
+	modelInstaceResult := model.GetUserModelInstanceById(db, &userModel, userId)
 
 	// check if error
 	if modelInstaceResult.Error != nil {
@@ -39,7 +66,7 @@ func GetUserProfileDataController(c *gin.Context, db *gorm.DB) {
 		return
 	}
 
-	// create the response body
+	// create the response body for successfull request
 	responseBody = ResponseBody{
 		Username: userModel.UserName,
 		Email:    userModel.Email,

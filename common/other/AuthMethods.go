@@ -43,7 +43,7 @@ func GenerateToken(user model.UserModel) (string, *jwt.Token) {
 	return tokenString, token
 }
 
-// verify access token method
+// verify access token method and return token claims
 func VerifyAccessToken(tokenString string) (jwt.MapClaims, bool) {
 	// get the secret key from the environment variable
 	secretTokenKey := []byte(os.Getenv("JWT_SECRET"))

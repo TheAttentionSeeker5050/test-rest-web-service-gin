@@ -50,9 +50,7 @@ func UserRouter(routerObj *gin.Engine, db *gorm.DB) *gin.Engine {
 	// wiew user profile
 	userRoutes.GET("/profile", func(ctx *gin.Context) {
 		// display text for testing purposes
-		ctx.JSON(200, gin.H{
-			"message": "profile",
-		})
+		user.GetUserProfileDataController(ctx, db)
 	})
 
 	return routerObj
