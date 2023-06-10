@@ -6,7 +6,6 @@ import (
 	"workspace/model"
 
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -142,22 +141,24 @@ func RegisterUserController(c *gin.Context, db *gorm.DB) {
 
 	var userModelInstance model.UserModel
 
-	encryptedPassword, err := bcrypt.GenerateFromPassword([]byte(requestBody.PassWord), bcrypt.DefaultCost)
-	if err != nil {
-		c.JSON(http.StatusBadRequest,
-			// a custom response data structure for request error
-			RegisterResponseError{
-				Message: "Oops! Something went wrong!",
-				Error:   "Password encryption failed!",
-			},
-		)
-		return
-	}
+	// // encrypt the password
+	// encryptedPassword, err := bcrypt.GenerateFromPassword([]byte(requestBody.PassWord), bcrypt.DefaultCost)
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest,
+	// 		// a custom response data structure for request error
+	// 		RegisterResponseError{
+	// 			Message: "Oops! Something went wrong!",
+	// 			Error:   "Password encryption failed!",
+	// 		},
+	// 	)
+	// 	return
+	// }
 
 	// set the user model instance values
 	userModelInstance.UserName = requestBody.UserName
 	userModelInstance.Email = requestBody.Email
-	userModelInstance.PassWord = string(encryptedPassword)
+	// userModelInstance.PassWord = string(encryptedPassword)
+	userModelInstance.PassWord = requestBody.PassWord
 
 	// create the user
 	result := model.CreateUserModelInstance(db, &userModelInstance)

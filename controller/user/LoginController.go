@@ -9,7 +9,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
-	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -76,7 +75,7 @@ func LoginUserController(c *gin.Context, db *gorm.DB) {
 	}
 
 	// Compare the password with the hashed password stored in the database
-	if err := bcrypt.CompareHashAndPassword([]byte(user.PassWord), []byte(requestBody.Password)); err != nil {
+	if model.CompareAndValidateHashedPassword(user.PassWord, requestBody.Password) == false {
 		// Password does not match, handle the error
 		c.JSON(http.StatusUnauthorized, LoginResponseError{
 			Message: "Oops! Something went wrong!",
