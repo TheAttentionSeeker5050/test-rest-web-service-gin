@@ -84,7 +84,7 @@ func LoginUserController(c *gin.Context, db *gorm.DB) {
 		return
 	}
 
-	// we will generate an access token based on user id
+	// generate an access token based on user id
 	// please add the access token generation logic here
 	tokenString, token := other.GenerateToken(user)
 

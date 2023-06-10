@@ -13,7 +13,7 @@ type UserModel struct {
 	PassWord string `json:"password" orm:"size(32)"`
 }
 
-// create query methods for this model
+// query methods for the user model
 
 // add create user query method here
 func CreateUserModelInstance(db *gorm.DB, model *UserModel) *gorm.DB {
@@ -43,17 +43,6 @@ func GetUserModelInstanceByEmail(db *gorm.DB, model *UserModel, email string) *g
 	result := db.Where("email = ?", email).First(&model)
 	return result
 }
-
-// password encryption methods
-// func EncryptPassword(password string) string {
-// 	// encrypt the password
-// 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-// 	if err != nil {
-// 		return ""
-// 	}
-// 	return string(hashedPassword)
-
-// }
 
 func (u *UserModel) BeforeCreate(tx *gorm.DB) (err error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(u.PassWord), bcrypt.DefaultCost)

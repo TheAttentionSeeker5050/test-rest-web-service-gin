@@ -29,9 +29,7 @@ func GetUserProfileDataController(c *gin.Context, db *gorm.DB) {
 	// declare the model instance
 	var userModel model.UserModel
 
-	// // please add the get user profile id data logic from token here
-	// // first get the token from the request header
-	// tokenString := c.Request.Header.Get("Authorization")
+	// first get the token from the request header ----------------------
 
 	// get token string from cookie
 	tokenString, err := c.Cookie("token")

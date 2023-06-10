@@ -141,19 +141,6 @@ func RegisterUserController(c *gin.Context, db *gorm.DB) {
 
 	var userModelInstance model.UserModel
 
-	// // encrypt the password
-	// encryptedPassword, err := bcrypt.GenerateFromPassword([]byte(requestBody.PassWord), bcrypt.DefaultCost)
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest,
-	// 		// a custom response data structure for request error
-	// 		RegisterResponseError{
-	// 			Message: "Oops! Something went wrong!",
-	// 			Error:   "Password encryption failed!",
-	// 		},
-	// 	)
-	// 	return
-	// }
-
 	// set the user model instance values
 	userModelInstance.UserName = requestBody.UserName
 	userModelInstance.Email = requestBody.Email
