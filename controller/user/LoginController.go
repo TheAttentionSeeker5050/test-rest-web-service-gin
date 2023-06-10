@@ -2,9 +2,8 @@ package user
 
 import (
 	"net/http"
-	"os"
-	"strconv"
 	"time"
+	"workspace/common/other"
 	"workspace/common/validators"
 	"workspace/model"
 
@@ -84,29 +83,31 @@ func LoginUserController(c *gin.Context, db *gorm.DB) {
 	// we will generate an access token based on user id
 	// please add the access token generation logic here
 
-	// y
+	// // get the token lifespan from the environment variable
 
-	token_lifespan, err := strconv.Atoi(os.Getenv("TOKEN_HOUR_LIFESPAN"))
+	// token_lifespan, err := strconv.Atoi(os.Getenv("TOKEN_HOUR_LIFESPAN"))
 
-	claims := jwt.MapClaims{}
-	claims["authorized"] = true
-	claims["user_id"] = user.Id
-	// the expiration should be passed from hours to machine time
-	claims["exp"] = time.Now().Add(time.Hour * time.Duration(token_lifespan)).Unix()
+	// claims := jwt.MapClaims{}
+	// claims["authorized"] = true
+	// claims["user_id"] = user.Id
+	// // the expiration should be passed from hours to machine time
+	// claims["exp"] = time.Now().Add(time.Hour * time.Duration(token_lifespan)).Unix()
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	// token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	secretTokenKey := []byte(os.Getenv("JWT_SECRET"))
+	// secretTokenKey := []byte(os.Getenv("JWT_SECRET"))
 
-	// generate token string or return error, please note that the secret should be in the environment variable
-	tokenString, err := token.SignedString(secretTokenKey)
+	// // generate token string or return error, please note that the secret should be in the environment variable
+	// tokenString, err := token.SignedString(secretTokenKey)
 
-	// check if error
-	if err != nil {
+	tokenString, token := other.GenerateToken(user)
+
+	// check if return is blank, this means that there is an error
+	if tokenString == "" || token == nil {
 		// return the error
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Oops! Something went wrong!",
-			"error":   "Token Authentication Failed err : " + err.Error(),
+			"error":   "Authentication Failed err",
 			// "error": err.Error(),
 		})
 		return
@@ -116,7 +117,7 @@ func LoginUserController(c *gin.Context, db *gorm.DB) {
 	http.SetCookie(c.Writer, &http.Cookie{
 		Name:    "token",
 		Value:   tokenString,
-		Expires: time.Now().Add(time.Hour * time.Duration(token_lifespan)),
+		Expires: time.Now().Add(time.Hour * time.Duration(token.Claims.(jwt.MapClaims)["exp"].(int64))),
 	})
 
 	// return the response
