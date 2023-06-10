@@ -16,8 +16,7 @@ func CalcRouter(routerObj *gin.Engine, db *gorm.DB) *gin.Engine {
 	// add the router group using the address prefix
 	calculators := routerObj.Group(addressPrefix)
 
-	// the real requests:
-
+	// calculator routes
 	calculators.POST("/basic-calc", func(ctx *gin.Context) {
 		controller.BasicCalcController(ctx, db)
 	})
@@ -30,12 +29,11 @@ func CalcRouter(routerObj *gin.Engine, db *gorm.DB) *gin.Engine {
 	calculators.POST("/statistics-calc", func(ctx *gin.Context) {
 		controller.StatisticsCalculatorController(ctx, db)
 	})
-	// calculators.GET("/history", func(c *gin.Context) {
-	// 	c.String(200, "**API Calculator History** \nThis should make use of the server database")
-	// })
+
+	// calculator history routes
 	calculators.POST("/history", func(ctx *gin.Context) {
 		controller.CalcHistorySaveToDbController(ctx, db)
-	})
+	}) // this is just for testing purposes
 	calculators.GET("/history", func(ctx *gin.Context) {
 		controller.CalcHistoryGetAllController(ctx, db)
 	})

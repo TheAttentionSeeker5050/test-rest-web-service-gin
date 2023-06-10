@@ -25,8 +25,6 @@ func ConnectDB() (*gorm.DB, error) {
 	password := os.Getenv("DB_LOCAL_PASSWORD")
 	dbname := os.Getenv("DB_LOCAL_NAME")
 
-	// connStr := "user=nicolas password=mysecurepassword dbname=my_first_golang_db host=localhost port=32768 sslmode=disable"
-
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", host, user, password, dbname, port) // this is on docker container
 
 	Database, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -34,6 +32,7 @@ func ConnectDB() (*gorm.DB, error) {
 	// auto migrate the models
 	Database.AutoMigrate(&model.TestModel{})
 	Database.AutoMigrate(&model.CalculatorHistoryModel{})
+	Database.AutoMigrate(&model.UserModel{})
 
 	if err != nil {
 		// if there is an error opening the connection, handle it
