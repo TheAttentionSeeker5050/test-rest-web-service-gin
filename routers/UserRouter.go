@@ -23,9 +23,7 @@ func UserRouter(routerObj *gin.Engine, db *gorm.DB) *gin.Engine {
 
 	userRoutes.POST("/login", func(ctx *gin.Context) {
 		// display text for testing purposes
-		ctx.JSON(200, gin.H{
-			"message": "login",
-		})
+		user.LoginUserController(ctx, db)
 	})
 
 	userRoutes.POST("/logout", func(ctx *gin.Context) {

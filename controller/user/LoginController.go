@@ -2,10 +2,14 @@ package user
 
 import (
 	"net/http"
+	"os"
+	"strconv"
+	"time"
 	"workspace/common/validators"
 	"workspace/model"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -77,12 +81,48 @@ func LoginUserController(c *gin.Context, db *gorm.DB) {
 		return
 	}
 
-	//  authenticate the user using OAuth2 using the github strategy
-	// 1. redirect the user to the github login page
+	// we will generate an access token based on user id
+	// please add the access token generation logic here
 
-	// 2. after the user has logged in, github will redirect the user to the callback url
-	// 3. the callback url will then exchange the authorization code for an access token
-	// 4. the access token will then be used to make API requests or retrieve user information
-	// 5. the access token will then be used to authenticate the user
+	// y
+
+	token_lifespan, err := strconv.Atoi(os.Getenv("TOKEN_HOUR_LIFESPAN"))
+
+	claims := jwt.MapClaims{}
+	claims["authorized"] = true
+	claims["user_id"] = user.Id
+	// the expiration should be passed from hours to machine time
+	claims["exp"] = time.Now().Add(time.Hour * time.Duration(token_lifespan)).Unix()
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	secretTokenKey := []byte(os.Getenv("JWT_SECRET"))
+
+	// generate token string or return error, please note that the secret should be in the environment variable
+	tokenString, err := token.SignedString(secretTokenKey)
+
+	// check if error
+	if err != nil {
+		// return the error
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Oops! Something went wrong!",
+			"error":   "Token Authentication Failed err : " + err.Error(),
+			// "error": err.Error(),
+		})
+		return
+	}
+
+	// we will set a cookie for the token
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:    "token",
+		Value:   tokenString,
+		Expires: time.Now().Add(time.Hour * time.Duration(token_lifespan)),
+	})
+
+	// return the response
+	c.JSON(http.StatusOK, LoginResponse{
+		Message: "Login successful!",
+		Error:   tokenString,
+	})
 
 }

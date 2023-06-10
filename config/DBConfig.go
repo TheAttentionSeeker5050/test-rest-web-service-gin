@@ -32,6 +32,7 @@ func ConnectDB() (*gorm.DB, error) {
 	// auto migrate the models
 	Database.AutoMigrate(&model.TestModel{})
 	Database.AutoMigrate(&model.CalculatorHistoryModel{})
+	Database.AutoMigrate(&model.UserModel{})
 
 	if err != nil {
 		// if there is an error opening the connection, handle it
