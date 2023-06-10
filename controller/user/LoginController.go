@@ -22,6 +22,11 @@ type LoginRequest struct {
 // LoginResponse - the response body for the login request
 type LoginResponse struct {
 	Message string `json:"message"`
+	Token   string `json:"token"`
+}
+
+type LoginResponseError struct {
+	Message string `json:"message"`
 	Error   string `json:"error"`
 }
 
@@ -35,7 +40,7 @@ func LoginUserController(c *gin.Context, db *gorm.DB) {
 	if err := c.ShouldBindJSON(&requestBody); err != nil {
 		c.JSON(http.StatusBadRequest,
 			// a custom response data structure for request error
-			LoginResponse{
+			LoginResponseError{
 				Message: "Oops! Something went wrong!",
 				Error:   err.Error(),
 			},
@@ -63,7 +68,7 @@ func LoginUserController(c *gin.Context, db *gorm.DB) {
 
 	if user.Id == 0 {
 		// User not found, handle the error
-		c.JSON(http.StatusUnauthorized, LoginResponse{
+		c.JSON(http.StatusUnauthorized, LoginResponseError{
 			Message: "Oops! Something went wrong!",
 			Error:   "Your user or password is incorrect",
 		})
@@ -73,7 +78,7 @@ func LoginUserController(c *gin.Context, db *gorm.DB) {
 	// Compare the password with the hashed password stored in the database
 	if err := bcrypt.CompareHashAndPassword([]byte(user.PassWord), []byte(requestBody.Password)); err != nil {
 		// Password does not match, handle the error
-		c.JSON(http.StatusUnauthorized, LoginResponse{
+		c.JSON(http.StatusUnauthorized, LoginResponseError{
 			Message: "Oops! Something went wrong!",
 			Error:   "Your user or password is incorrect",
 		})
@@ -82,34 +87,16 @@ func LoginUserController(c *gin.Context, db *gorm.DB) {
 
 	// we will generate an access token based on user id
 	// please add the access token generation logic here
-
-	// // get the token lifespan from the environment variable
-
-	// token_lifespan, err := strconv.Atoi(os.Getenv("TOKEN_HOUR_LIFESPAN"))
-
-	// claims := jwt.MapClaims{}
-	// claims["authorized"] = true
-	// claims["user_id"] = user.Id
-	// // the expiration should be passed from hours to machine time
-	// claims["exp"] = time.Now().Add(time.Hour * time.Duration(token_lifespan)).Unix()
-
-	// token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
-	// secretTokenKey := []byte(os.Getenv("JWT_SECRET"))
-
-	// // generate token string or return error, please note that the secret should be in the environment variable
-	// tokenString, err := token.SignedString(secretTokenKey)
-
 	tokenString, token := other.GenerateToken(user)
 
 	// check if return is blank, this means that there is an error
 	if tokenString == "" || token == nil {
 		// return the error
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Oops! Something went wrong!",
-			"error":   "Authentication Failed err",
-			// "error": err.Error(),
-		})
+		c.JSON(http.StatusInternalServerError,
+			LoginResponseError{
+				Message: "Oops! Something went wrong with your session validation",
+				Error:   "Authentication Error. Please try logging in again",
+			})
 		return
 	}
 
@@ -123,7 +110,7 @@ func LoginUserController(c *gin.Context, db *gorm.DB) {
 	// return the response
 	c.JSON(http.StatusOK, LoginResponse{
 		Message: "Login successful!",
-		Error:   tokenString,
+		Token:   tokenString,
 	})
 
 }

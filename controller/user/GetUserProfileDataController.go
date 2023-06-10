@@ -14,7 +14,11 @@ type ResponseBody struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
 	Message  string `json:"message"`
-	Error    string `json:"error"`
+}
+
+type ResponseBodyError struct {
+	Message string `json:"message"`
+	Error   string `json:"error"`
 }
 
 // the api endpoint for retrieving the user profile
@@ -33,9 +37,9 @@ func GetUserProfileDataController(c *gin.Context, db *gorm.DB) {
 	tokenClaims, isTokenValid := other.VerifyAccessToken(tokenString)
 	if !isTokenValid {
 		// return the error
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"message": "Oops! Something went wrong!",
-			"error":   "Validation Error. Token is invalid!",
+		c.JSON(http.StatusUnauthorized, ResponseBodyError{
+			Message: "Oops! Something went wrong with your session validation",
+			Error:   "Authentication Error. Please try logging in again",
 		})
 		return
 	}
@@ -46,9 +50,9 @@ func GetUserProfileDataController(c *gin.Context, db *gorm.DB) {
 	// check if the user id is valid
 	if userId <= 0 {
 		// return the error
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"message": "Oops! Something went wrong!",
-			"error":   "Validation Error. Please login again!",
+		c.JSON(http.StatusUnauthorized, ResponseBodyError{
+			Message: "Oops! Something went wrong!",
+			Error:   "Internal Error. Could not find user data",
 		})
 		return
 	}
@@ -59,9 +63,9 @@ func GetUserProfileDataController(c *gin.Context, db *gorm.DB) {
 	// check if error
 	if modelInstaceResult.Error != nil {
 		// return the error
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Oops! Something went wrong!",
-			"error":   modelInstaceResult.Error,
+		c.JSON(http.StatusInternalServerError, ResponseBodyError{
+			Message: "Oops! Something went wrong!",
+			Error:   "Internal Error. Could not find user data",
 		})
 		return
 	}

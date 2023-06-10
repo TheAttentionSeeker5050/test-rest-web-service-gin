@@ -22,7 +22,11 @@ type RegisterRequest struct {
 type RegisterResponse struct {
 	UserName string `json:"user_name"`
 	Message  string `json:"message"`
-	Error    string `json:"error"`
+}
+
+type RegisterResponseError struct {
+	Message string `json:"message"`
+	Error   string `json:"error"`
 }
 
 // this is the api endpoint for the user registration
@@ -35,10 +39,9 @@ func RegisterUserController(c *gin.Context, db *gorm.DB) {
 	if err := c.ShouldBindJSON(&requestBody); err != nil {
 		c.JSON(http.StatusBadRequest,
 			// a custom response data structure for request error
-			RegisterResponse{
-				UserName: "",
-				Message:  "Oops! Something went wrong!",
-				Error:    err.Error(),
+			RegisterResponseError{
+				Message: "Oops! Something went wrong!",
+				Error:   err.Error(),
 			},
 		)
 		return
@@ -51,10 +54,9 @@ func RegisterUserController(c *gin.Context, db *gorm.DB) {
 	if passwordsMatch == false {
 		c.JSON(http.StatusBadRequest,
 			// a custom response data structure for request error
-			RegisterResponse{
-				UserName: "",
-				Message:  "Oops! Something went wrong!",
-				Error:    "Passwords do not match!",
+			RegisterResponseError{
+				Message: "Oops! Something went wrong!",
+				Error:   "Passwords do not match!",
 			},
 		)
 		return
@@ -67,10 +69,9 @@ func RegisterUserController(c *gin.Context, db *gorm.DB) {
 	if passwordIsStrongEnough == false {
 		c.JSON(http.StatusBadRequest,
 			// a custom response data structure for request error
-			RegisterResponse{
-				UserName: "",
-				Message:  "Oops! Something went wrong!",
-				Error:    "Password is not strong enough!\nPlease use at least 8 characters, 1 uppercase, 1 lowercase, 1 number and 1 special character!",
+			RegisterResponseError{
+				Message: "Oops! Something went wrong!",
+				Error:   "Password is not strong enough!\nPlease use at least 8 characters, 1 uppercase, 1 lowercase, 1 number and 1 special character!",
 			},
 		)
 		return
@@ -83,10 +84,9 @@ func RegisterUserController(c *gin.Context, db *gorm.DB) {
 	if userNameIsValid == false {
 		c.JSON(http.StatusBadRequest,
 			// a custom response data structure for request error
-			RegisterResponse{
-				UserName: "",
-				Message:  "Oops! Something went wrong!",
-				Error:    "User name is not valid!\nPlease use at least 6 characters, no special characters, no spaces, and start with letter. Your new username can also contain (but not start with) numbers, and the special characters _ and -",
+			RegisterResponseError{
+				Message: "Oops! Something went wrong!",
+				Error:   "User name is not valid!\nPlease use at least 6 characters, no special characters, no spaces, and start with letter. Your new username can also contain (but not start with) numbers, and the special characters _ and -",
 			},
 		)
 		return
@@ -99,10 +99,9 @@ func RegisterUserController(c *gin.Context, db *gorm.DB) {
 	if userNameIsTaken == true {
 		c.JSON(http.StatusBadRequest,
 			// a custom response data structure for request error
-			RegisterResponse{
-				UserName: "",
-				Message:  "Oops! Something went wrong!",
-				Error:    "User name is already taken!",
+			RegisterResponseError{
+				Message: "Oops! Something went wrong!",
+				Error:   "User name is already taken!",
 			},
 		)
 		return
@@ -115,10 +114,9 @@ func RegisterUserController(c *gin.Context, db *gorm.DB) {
 	if emailIsTaken == true {
 		c.JSON(http.StatusBadRequest,
 			// a custom response data structure for request error
-			RegisterResponse{
-				UserName: "",
-				Message:  "Oops! Something went wrong!",
-				Error:    "Email is already taken!",
+			RegisterResponseError{
+				Message: "Oops! Something went wrong!",
+				Error:   "Email is already taken!",
 			},
 		)
 		return
@@ -131,10 +129,9 @@ func RegisterUserController(c *gin.Context, db *gorm.DB) {
 	if emailIsValid == false {
 		c.JSON(http.StatusBadRequest,
 			// a custom response data structure for request error
-			RegisterResponse{
-				UserName: "",
-				Message:  "Oops! Something went wrong!",
-				Error:    "Email is not valid!",
+			RegisterResponseError{
+				Message: "Oops! Something went wrong!",
+				Error:   "Email is not valid!",
 			},
 		)
 		return
@@ -149,7 +146,7 @@ func RegisterUserController(c *gin.Context, db *gorm.DB) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest,
 			// a custom response data structure for request error
-			RegisterResponse{
+			RegisterResponseError{
 				Message: "Oops! Something went wrong!",
 				Error:   "Password encryption failed!",
 			},
@@ -169,10 +166,9 @@ func RegisterUserController(c *gin.Context, db *gorm.DB) {
 	if result.Error != nil {
 		c.JSON(http.StatusBadRequest,
 			// a custom response data structure for request error
-			RegisterResponse{
-				UserName: "",
-				Message:  "Oops! Something went wrong!",
-				Error:    result.Error.Error(),
+			RegisterResponseError{
+				Message: "Oops! Something went wrong!",
+				Error:   result.Error.Error(),
 			},
 		)
 		return
@@ -184,7 +180,6 @@ func RegisterUserController(c *gin.Context, db *gorm.DB) {
 		RegisterResponse{
 			UserName: userModelInstance.UserName,
 			Message:  "User created successfully!",
-			Error:    "",
 		},
 	)
 	return
