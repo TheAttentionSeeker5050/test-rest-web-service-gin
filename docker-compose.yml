@@ -1,0 +1,34 @@
+# version: '1.0'
+# services:
+#   web:
+#     container_name: myFirstAPI
+#     hostname: myFirstAPI
+#     restart: on-failure:3
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     command: go run .
+#     environment:
+#       # my environment variables from .env file
+#       GET_HOSTS_FROM: dns
+#     ports:
+#       - 8080:8080
+
+
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      - GO_ENV=production
+      - DB_LOCAL_HOST=192.168.0.99
+      - DB_LOCAL_PORT=32768
+      - DB_LOCAL_USER=nicolas
+      - DB_LOCAL_PASSWORD=mysecurepassword
+      - DB_LOCAL_NAME=my_first_golang_db
+      - JWT_SECRET=9e0abf5f89c22e2b8d4a7e0d36c598f3a08ce1e73896074542ef7bce2e28dcf75ce1fd51c06e4817882783b2b695c4527f39fb6a4e3983965d2a5dc4cc520683
+      - TOKEN_HOUR_LIFESPAN=48
