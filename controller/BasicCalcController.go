@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"workspace/common/calculator"
+	"workspace/common/other"
 	"workspace/model"
 
 	"github.com/gin-gonic/gin"
@@ -49,6 +50,21 @@ func BasicCalcController(c *gin.Context, db *gorm.DB) {
 	calcHistoryModel.Params = fmt.Sprintf("%.2f", requestBody.Num1) + ", " + fmt.Sprintf("%.2f", requestBody.Num2) + ", " + requestBody.Operator
 	// calcHistoryModel.Results = fmt.Sprintf("%f", other.RoundFloat(result, 2))
 	calcHistoryModel.Results = fmt.Sprintf("%.2f", result)
+
+	// use the validate from cookies auth method
+	userIsValidated, userId := other.ValidateUserAuthenticatedFromCookies(c)
+
+	// check if the user is validated
+	if userIsValidated {
+		// get the user model instance
+		var userModel model.UserModel
+
+		// get the user model instance by id
+		model.GetUserModelInstanceById(db, &userModel, userId)
+
+		// set the username
+		calcHistoryModel.UserName = userModel.UserName
+	}
 
 	// save the model to the database
 	model.CreateCalculatorHistoryModelInstance(db, &calcHistoryModel)

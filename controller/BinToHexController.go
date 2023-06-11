@@ -4,6 +4,7 @@ package controller
 import (
 	"net/http"
 	"workspace/common/calculator"
+	"workspace/common/other"
 	"workspace/model"
 
 	"github.com/gin-gonic/gin"
@@ -58,8 +59,22 @@ func BinToHexController(c *gin.Context, db *gorm.DB) {
 	// calcHistoryModel.Results = fmt.Sprintf("%f", other.RoundFloat(result, 2))
 	calcHistoryModel.Results = result
 
-	// save the model to the database and return error
+	// use the validate from cookies auth method
+	userIsValidated, userId := other.ValidateUserAuthenticatedFromCookies(c)
 
+	// check if the user is validated
+	if userIsValidated {
+		// get the user model instance
+		var userModel model.UserModel
+
+		// get the user model instance by id
+		model.GetUserModelInstanceById(db, &userModel, userId)
+
+		// set the username
+		calcHistoryModel.UserName = userModel.UserName
+	}
+
+	// save the model to the database and return error
 	model.CreateCalculatorHistoryModelInstance(db, &calcHistoryModel)
 
 	// then create the response data struct

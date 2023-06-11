@@ -7,6 +7,7 @@ import (
 	"time"
 	"workspace/model"
 
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 )
 
@@ -65,4 +66,34 @@ func VerifyAccessToken(tokenString string) (jwt.MapClaims, bool) {
 	}
 
 	return nil, false
+}
+
+// validate if user is authenticated return true if authenticated and return user id
+func ValidateUserAuthenticatedFromCookies(c *gin.Context) (bool, int) {
+
+	// http request context
+
+	// get token string from secure cookie
+	tokenBytes, err := SecureCookieObj.GetValue(nil, c.Request)
+
+	// check if error on getting the token string
+	if err != nil {
+		return false, 0
+	} else {
+		// verify the token
+		tokenClaims, isTokenValid := VerifyAccessToken(string(tokenBytes))
+		if !isTokenValid {
+			return false, 0
+		} else {
+			// get the user id from the token claims
+			userId := int(tokenClaims["user_id"].(float64))
+
+			// check if the user id is valid
+			if userId <= 0 {
+				return false, 0
+			} else {
+				return true, userId
+			}
+		}
+	}
 }
