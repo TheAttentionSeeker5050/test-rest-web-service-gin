@@ -106,3 +106,5 @@ Added all these methods mentioned, as well as password encryption and hash valid
 ### #5 Added authenticated username to calc history
 Built methods that check the authenticated user and return boolean for logged in or not, and user id if necessary. So we are done with calculator history API endpoints. Enabled secure cookies as well.
 
+### #6 Deployed on VPS
+Deployed using digital ocean droplet, ssl certificate, nginx reverse proxies and docker compose images.
