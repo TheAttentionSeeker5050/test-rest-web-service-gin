@@ -102,3 +102,7 @@ At this moment I am in the process of implementing sessions and user authorizati
 
 ### #4 Added user register, authentication and authorization methods
 Added all these methods mentioned, as well as password encryption and hash validation methods. Also made a few changes to the response body of the user calls to explain better any errors that occur without returning "err.Error()", which is a bad security practice. I My next step will be to secure authentication token on the client browser using cookie encryption. I am also adding logout (will delete the cookie from the client browser and invalidate or wipe out the cookie from the server), and put methods for deleting user data. Calculator controllers need to also check if the user is authenticated to add it's username to the database entry, or save them as anon if not auth. I will do more unit tests to validate input, output and the interaction between all my methods. And finally when all of that is done I will test deployment on a cloud VPS of my choosing.
+
+### #5 Added authenticated username to calc history
+Built methods that check the authenticated user and return boolean for logged in or not, and user id if necessary. So we are done with calculator history API endpoints. Enabled secure cookies as well.
+

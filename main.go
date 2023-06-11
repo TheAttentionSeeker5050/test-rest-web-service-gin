@@ -21,11 +21,6 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	// // configure Oauth2
-	// oauth2ConfigObj := config.Oauth2Config()
-
-	// fmt.Println("auth config:", oauth2ConfigObj)
-
 	// Connect to the database
 	database := loadDatabase()
 
