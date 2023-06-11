@@ -4,7 +4,12 @@ from golang:1.16.3-alpine3.13
 WORKDIR /app
 
 # Copy the Go module files to the working directory
-COPY go.mod go.sum ./
+COPY . ./
+
+# remove the test files
+RUN rm -rf ./test
+RUN rm -rf ./config/MockDBSetup.go
+RUN go mod tidy
 
 # Download the Go module dependencies
 RUN go mod download
