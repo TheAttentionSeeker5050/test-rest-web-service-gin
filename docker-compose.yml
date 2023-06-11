@@ -1,0 +1,28 @@
+
+
+version: '3'
+services:
+  postgres:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: nicolas
+      POSTGRES_PASSWORD: mysecurepassword
+      POSTGRES_DB: my_first_golang_db
+    
+    ports:
+      - 5432:5432
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    external_links:
+      - pg-golang1
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on: 
+      - postgres
+    env_file:
+      - .env
