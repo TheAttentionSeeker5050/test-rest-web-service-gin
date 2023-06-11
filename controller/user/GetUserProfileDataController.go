@@ -1,6 +1,7 @@
 package user
 
 import (
+	"fmt"
 	"net/http"
 	"workspace/common/other"
 	"workspace/model"
@@ -16,6 +17,7 @@ type ResponseBody struct {
 	Message  string `json:"message"`
 }
 
+// the structure for the response body if error
 type ResponseBodyError struct {
 	Message string `json:"message"`
 	Error   string `json:"error"`
@@ -29,16 +31,22 @@ func GetUserProfileDataController(c *gin.Context, db *gorm.DB) {
 	// declare the model instance
 	var userModel model.UserModel
 
-	// first get the token from the request header ----------------------
+	// get token string from secure cookie
+	tokenBytes, err := other.SecureCookieObj.GetValue(nil, c.Request)
 
-	// get token string from cookie
-	tokenString, err := c.Cookie("token")
+	// check if error on getting the token string
 	if err != nil {
+		// return the error
+		fmt.Println(err)
+		c.JSON(http.StatusUnauthorized, ResponseBodyError{
+			Message: "Oops! Something went wrong with your cookie validation",
+			Error:   "Authentication Error. Please try logging in again",
+		})
 		return
 	}
 
 	// verify the token
-	tokenClaims, isTokenValid := other.VerifyAccessToken(tokenString)
+	tokenClaims, isTokenValid := other.VerifyAccessToken(string(tokenBytes))
 	if !isTokenValid {
 		// return the error
 		c.JSON(http.StatusUnauthorized, ResponseBodyError{

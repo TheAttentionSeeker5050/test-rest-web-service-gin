@@ -2,13 +2,11 @@ package user
 
 import (
 	"net/http"
-	"time"
 	"workspace/common/other"
 	"workspace/common/validators"
 	"workspace/model"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt"
 	"gorm.io/gorm"
 )
 
@@ -99,12 +97,18 @@ func LoginUserController(c *gin.Context, db *gorm.DB) {
 		return
 	}
 
-	// we will set a cookie for the token
-	http.SetCookie(c.Writer, &http.Cookie{
-		Name:    "token",
-		Value:   tokenString,
-		Expires: time.Now().Add(time.Hour * time.Duration(token.Claims.(jwt.MapClaims)["exp"].(int64))),
-	})
+	// set the cookie using secure cookie
+	// but first convert cookie to byte array
+	cookieBytes := []byte(tokenString)
+	if err := other.SecureCookieObj.SetValue(c.Writer, cookieBytes); err != nil {
+		// return the error if secure cookie cannot be saved
+		c.JSON(http.StatusInternalServerError,
+			LoginResponseError{
+				Message: "Oops! Something went wrong with your session validation",
+				Error:   "Authentication Error. Please try logging in again",
+			})
+		return
+	}
 
 	// return the response
 	c.JSON(http.StatusOK, LoginResponse{
