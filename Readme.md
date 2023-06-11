@@ -1,5 +1,20 @@
 # My First Golang Gin Server
 
+- [Description](#description)
+- [Tools to be Used](#tools-to-be-used)
+- [API Structure](#api-structure)
+- [Request Body Structure for Calculator calls](#request-body-structure-for-calculator-calls)
+- [Request Body Structure for user calls](#request-body-structure-for-user-calls)
+- [Folder structure of the project](#folder-structure-of-the-project)
+- [Updates](#updates)
+  - [#1 Why you only see the main branch on public server?](#1-why-you-only-see-the-main-branch-on-public-server)
+  - [#2 Added Postgres database connection](#2-added-postgres-database-connection)
+  - [#3 Improved postgres database and implemented more to API views](#3-improved-postgres-database-and-implemented-more-to-api-views)
+  - [#4 Added user register, authentication, and authorization methods](#4-added-user-register-authentication-and-authorization-methods)
+  - [#5 Added authenticated username to calc history](#5-added-authenticated-username-to-calc-history)
+  - [#6 Deployed on VPS](#6-deployed-on-vps)
+
+
 ## Description
 
 This is just a basic project to get familiarized with golang, I just got started with go and want to get familiarized with the syntax, golang's methodology and the processes, methods and capabilities of Gin before I do more complex projects. The project consist on a Rest API in which you make a request and it calculates a specific mathematical function and returns values based on your input. I may try out other features of gin such as adding web drivers, authentication, permissions and advanced validation, but for now I will just make  API post requests without any auth and get the result on a json response. 
