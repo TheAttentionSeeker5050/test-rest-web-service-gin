@@ -1,4 +1,4 @@
-from golang:1.16.3-alpine3.13 
+from golang:1.20-alpine
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -6,9 +6,18 @@ WORKDIR /app
 # Copy the Go module files to the working directory
 COPY . ./
 
+# ENV GO111MODULE=on
+# ENV GOFLAGS=-mod=vendor
+
+
 # remove the test files
 RUN rm -rf ./test
 RUN rm -rf ./config/MockDBSetup.go
+
+
+# RUN go mod init workspace
+
+# download dependencies
 RUN go mod tidy
 
 # Download the Go module dependencies
@@ -38,8 +47,6 @@ CMD ["./myapp"]
 
 # run mkdir -p /go/src/myFirstAPI
 
-# ENV GO111MODULE=on
-# ENV GOFLAGS=-mod=vendor
 
 # workdir /go/src/myFirstAPI
 

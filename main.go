@@ -31,7 +31,7 @@ func main() {
 	router.NoRoute(controller.NoRouteOrMethodController)
 
 	// run router on port 5000
-	router.Run(":5000")
+	router.Run(":8080")
 
 }
 

@@ -1,6 +1,6 @@
 **/.classpath
 **/.dockerignore
-**/.env
+# **/.env
 config/MockDBSetup.go
 test/
 **/.git

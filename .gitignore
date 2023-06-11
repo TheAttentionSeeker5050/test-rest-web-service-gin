@@ -25,7 +25,7 @@ bin/
 *.rar
 *.7z
 *.exe
-
+pgdata/
 # images
 *.jpg
 *.jpeg
